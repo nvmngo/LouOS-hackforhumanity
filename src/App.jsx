@@ -72,6 +72,7 @@ const AuthenticatedApp = () => {
           <Route path="/survey/:mode" element={<SurveyExperience />} />
           <Route path="/summary" element={<SummaryAllocation />} />
           <Route path="/casework" element={<CaseworkerWork />} />
+          <Route path="/casework/:recordId" element={<CaseworkerWork />} />
           <Route path="/external-help" element={<ExternalDecision />} />
           <Route path="/referral-mvp" element={<ReferralMVP />} />
           <Route path="/final-report" element={<FinalReportMVP />} />
