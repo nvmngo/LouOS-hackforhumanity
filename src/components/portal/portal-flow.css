@@ -32,7 +32,7 @@
 .portal-intake .online-form-vertical .online-section:first-child{padding-top:0;border-top:0}
 .portal-intake .online-section>header{gap:15px;margin-bottom:26px}
 .portal-intake .online-section>header>span{min-width:auto;height:auto;background:transparent;color:#b65331;font-size:18px}
-.portal-intake .online-section h2{color:#282321;font-family:'DM Sans',sans-serif;font-size:28px;font-weight:700}
+.portal-intake .online-section h2{color:#282321;font-family:'DM Sans',sans-serif;font-size:32px;font-weight:900;line-height:1.15}
 .portal-intake .online-section header p{color:#716963;font-size:17px;line-height:1.55;font-style:normal}
 .portal-intake .online-fields{grid-template-columns:1fr;gap:28px}
 .portal-intake .online-field:has(textarea),.portal-intake .online-wide{grid-column:auto}
