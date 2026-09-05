@@ -55,7 +55,7 @@
 .portal-intake .online-section-confirmation>header{margin-bottom:18px}
 .portal-intake .online-section-confirmation>header h2{text-transform:uppercase;letter-spacing:.12em;font-size:16px;color:#6c645f}
 .portal-intake .online-section-confirmation .online-fields{grid-template-columns:2fr 1fr;gap:42px}
-.portal-intake .online-actions{display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:30px}
+.portal-intake .online-actions{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:16px;margin-top:30px}
 .portal-intake .online-submit,.portal-intake .online-cancel{width:250px;min-height:64px;padding:18px 30px;border-radius:999px;font-family:'DM Sans',sans-serif;font-size:20px;font-weight:900}
 .portal-intake .online-submit{margin-top:0;background:#713629}
 .portal-intake .online-cancel{border:2px solid #713629;background:#fff;color:#713629}
