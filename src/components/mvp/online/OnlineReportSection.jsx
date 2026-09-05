@@ -1,3 +1,3 @@
 import React from 'react';
 import OnlineReportField from '@/components/mvp/online/OnlineReportField';
-export default function OnlineReportSection({section,values,onChange}){return <section className="online-section"><header><span>{section.number}</span><div><h2>{section.title}</h2>{section.note&&<p>{section.note}</p>}</div></header><div className="online-fields">{section.fields.map(field=><OnlineReportField key={field.id} field={field} value={values[field.id]} onChange={onChange}/>)}</div></section>}
+export default function OnlineReportSection({section,values,onChange}){return <section className={`online-section online-section-${section.number||'confirmation'}`}><header><span>{section.number}</span><div><h2>{section.title}</h2>{section.note&&<p>{section.note}</p>}</div></header><div className="online-fields">{section.fields.map(field=><OnlineReportField key={field.id} field={field} value={values[field.id]} onChange={onChange}/>)}</div></section>}
