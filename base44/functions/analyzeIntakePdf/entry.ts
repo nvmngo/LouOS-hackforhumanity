@@ -36,13 +36,26 @@ Return JSON with exactly these keys: client_name, preferred_name, age, preferred
 Map "Full name" to client_name and "What is the most important support you need first?" to main_need. problems must be an array of objects with category, priority, description. Use the printed relevant-area label as category where possible. Preserve "Immediate" urgency when visible; otherwise priority must be High, Medium, or Low. Put form details that have no dedicated JSON key into key_information as short factual strings prefixed by their printed label, including Case ID, Date, Case status, Urgency, accommodation duration, safe today response, why the client came, recent events, urgent attention, important information, caseworker name, role, and specialisation.
 
 summary must be a concise 3–6 sentence case description covering why the client came, current accommodation and safety, dependants, major problems, urgent concerns, immediate priority, and requested support. Extract only information actually visible in handwriting or marked choices. Never guess, infer, complete blank fields, or treat printed form text as a client response. If handwriting or a mark is unclear, use an empty string or omit that fact from key_information; use empty arrays when no items are readable.`;
-    const geminiResponse = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': secrets.get('GEMINI_API_KEY') }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }, { inline_data: { mime_type: mimeType, data: base64 } }] }], generationConfig: { responseMimeType: 'application/json', temperature: 0.1 } }) });
-    const result = await geminiResponse.json();
-    if (!geminiResponse.ok) return Response.json({ error: result?.error?.message || 'Gemini could not analyse this image.' }, { status: 502 });
-    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const openAiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${secrets.get('OPENAI_API_KEY')}` },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'user', content: [
+          { type: 'text', text: prompt + '\nReturn only valid JSON.' },
+          { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64}` } }
+        ] }],
+        response_format: { type: 'json_object' },
+        temperature: 0.1,
+        max_tokens: 2000
+      })
+    });
+    const result = await openAiResponse.json();
+    if (!openAiResponse.ok) return Response.json({ error: result?.error?.message || 'OpenAI could not analyse this image.' }, { status: 502 });
+    const text = result?.choices?.[0]?.message?.content;
     if (!text) return Response.json({ error: 'No readable information was found.' }, { status: 422 });
     return Response.json({ analysis: JSON.parse(text) });
   } catch (error) {
-    return Response.json({ error: error instanceof Error ? error.message : 'Image analysis failed.' }, { status: 500 });
+    return Response.json({ error: error instanceof Error ? error.message : 'OpenAI image analysis failed.' }, { status: 500 });
   }
 }
