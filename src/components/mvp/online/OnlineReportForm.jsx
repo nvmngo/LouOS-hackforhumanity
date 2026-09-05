@@ -5,7 +5,7 @@ import {base44} from '@/api/base44Client';
 import OnlineReportSection from '@/components/mvp/online/OnlineReportSection';
 import {onlineReportSections} from '@/components/mvp/online/onlineReportFields';
 import '@/online-report.css';
-export default function OnlineReportForm({onSubmitted}){
+export default function OnlineReportForm({onSubmitted,cancelPath}){
   const navigate=useNavigate();
   const [values,setValues]=useState({date:new Date().toISOString().slice(0,10)});
   const [busy,setBusy]=useState(false),[error,setError]=useState('');
@@ -21,10 +21,12 @@ export default function OnlineReportForm({onSubmitted}){
   };
   const renderSection=section=><OnlineReportSection key={section.title} section={section} values={values} onChange={update}/>;
   return <form className="online-report" onSubmit={submit}>
-    <header className="online-intro"><h1>Lou’s Place</h1><p className="online-form-title">WELCOME FORM</p><p><strong>Take your time, and leave blank anything you’d rather not answer.</strong> Someone on our team is happy to help you fill this in.</p></header>
-    <div className="online-form-columns"><div className="online-column">{onlineReportSections.slice(0,1).map(renderSection)}</div><div className="online-column">{onlineReportSections.slice(1,3).map(renderSection)}</div></div>
-    {onlineReportSections.slice(3).map(renderSection)}
+    <header className="online-intro"><p className="online-form-title">WELCOME FORM</p><h1>Lou’s Place</h1><p><strong>Take your time, and leave blank anything you’d rather not answer.</strong> Someone on our team is happy to help you fill this in.</p></header>
+    <div className="online-form-vertical">{onlineReportSections.map(renderSection)}</div>
     {error&&<p className="online-error" role="alert">{error}</p>}
-    <button className="mvp-btn online-submit" disabled={busy}>{busy?<><LoaderCircle className="online-spin"/>Preparing summary…</>:<>Submit welcome form <Send size={18}/></>}</button>
+    <div className="online-actions">
+      <button className="mvp-btn online-submit" disabled={busy}>{busy?<><LoaderCircle className="online-spin"/>Preparing summary…</>:<>Submit Form <Send size={22}/></>}</button>
+      {cancelPath&&<button type="button" className="online-cancel" onClick={()=>navigate(cancelPath)} disabled={busy}>Cancel</button>}
+    </div>
   </form>;
 }
