@@ -44,6 +44,7 @@ import EmployeeCaseWorkspace from '@/pages/employee/EmployeeCaseWorkspace';
 import EmployeeDecision from '@/pages/employee/EmployeeDecision';
 import EmployeeReferrals from '@/pages/employee/EmployeeReferrals';
 import EmployeeFinalReport from '@/pages/employee/EmployeeFinalReport';
+import RoleSelection from '@/pages/RoleSelection';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -65,8 +66,9 @@ const AuthenticatedApp = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/" element={<RoleSelection />} />
       <Route element={<PublicPortalShell />}>
-        <Route path="/" element={<PortalWelcome />} />
+        <Route path="/portal" element={<PortalWelcome />} />
         <Route path="/portal/survey" element={<PortalSurveyModes />} />
         <Route path="/portal/survey/:mode" element={<PortalSurveyExperience />} />
         <Route path="/portal/matching" element={<PortalMatching />} />
