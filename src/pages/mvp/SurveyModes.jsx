@@ -1,5 +1,5 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {FileText,MessagesSquare,ListChecks,ArrowRight} from 'lucide-react';
-const modes=[['paper','Paper',FileText,'Use a paper intake form with help from a team member.'],['chat','AI Chatbox',MessagesSquare,'Share what brings you here in your own words.'],['questions','Predefined Questions',ListChecks,'Answer a short set of simple guided questions.']];
+import {FileText,MessagesSquare,ArrowRight} from 'lucide-react';
+const modes=[['chat','AI Chatbox',MessagesSquare,'Share what brings you here in your own words.'],['paper','Paper',FileText,'Use a paper intake form with help from a team member.']];
 export default function SurveyModes(){return <main className="mvp-main"><header className="mvp-title"><p className="mvp-kicker">Choose what feels comfortable</p><h1>How would you like to begin?</h1><p>All options use fictional demo information in this prototype.</p></header><div className="mode-grid">{modes.map(([id,title,Icon,text])=><article className="mode-card" key={id}><div className="mode-icon"><Icon/></div><h2>{title}</h2><p>{text}</p><Link className="mvp-btn" to={`/survey/${id}`}>Choose {title}<ArrowRight size={17}/></Link></article>)}</div></main>}
