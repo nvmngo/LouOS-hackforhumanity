@@ -12,7 +12,7 @@
 .portal-home:before,.portal-home:after{content:"";position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:.48}
 .portal-home:before{width:44vw;height:44vw;left:-12vw;top:20vh;background:#ffd7ce;animation:portal-drift 16s ease-in-out infinite alternate}
 .portal-home:after{width:42vw;height:42vw;right:-8vw;top:30vh;background:#fff7f2;animation:portal-drift 19s ease-in-out infinite alternate-reverse}
-.portal-home .mvp-top{position:fixed;z-index:20;top:22px;left:24px;right:24px;width:auto;min-height:64px;margin:0;padding:0 24px;border:1px solid #ffffff8f;border-radius:999px;background:#fff8f0b8;box-shadow:0 12px 30px #7136291c;backdrop-filter:blur(14px)}
+.portal-home .mvp-top{position:fixed;z-index:20;top:22px;left:24px;right:24px;width:auto;min-height:64px;margin:0;padding:0 24px;border:1px solid transparent;border-radius:999px;background:transparent;box-shadow:none;backdrop-filter:none}
 .portal-home .mvp-step{margin-left:auto;font-size:16px;font-weight:500;letter-spacing:0;text-transform:none;color:#38241f}
 .portal-welcome{position:relative;z-index:1;width:min(900px,calc(100% - 40px));margin:auto;padding:126px 0 60px;display:grid;justify-items:center;gap:52px;text-align:center}
 .portal-welcome__hero{width:min(620px,100%);min-height:680px;padding:74px 58px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid #ffffffa8;border-radius:50%;background:linear-gradient(145deg,#fff7f0a8,#fffaf5d1);box-shadow:inset 0 0 70px #ffffff66}
