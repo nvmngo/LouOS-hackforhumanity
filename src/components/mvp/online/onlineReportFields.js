@@ -8,7 +8,7 @@ export const onlineReportSections = [
     {id:'stayDuration',label:'How long can you stay there? (roughly)',type:'textarea'}
   ]},
   {number:'2',title:'What’s going on right now',note:'Tick anything that applies.',fields:[
-    {id:'problemCategories',label:'',type:'checkboxes',options:['Somewhere to live','Safety','Money','Health, or how I’m feeling','Family or children','Legal help','Work or study','Feeling alone','Something else']}
+    {id:'problemCategories',label:'',type:'checkboxes',options:['Somewhere to live','Safety','Money','Health, or how I’m feeling','Family or children','Legal help','Work or study','Feeling alone','Something else'],otherInputId:'problemCategoriesOther'}
   ]},
   {number:'3',title:'Your situation',fields:[
     {id:'reasonToday',label:'Why did you come to Lou’s Place today?',type:'textarea'}
