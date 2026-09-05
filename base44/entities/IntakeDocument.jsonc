@@ -68,6 +68,9 @@
         "saved"
       ],
       "default": "reviewed"
+    },
+    "form_id": {
+      "type": "string"
     }
   },
   "required": [
