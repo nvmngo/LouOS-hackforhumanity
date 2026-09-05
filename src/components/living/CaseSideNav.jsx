@@ -1,0 +1,4 @@
+import React from 'react';
+import {UserRound,Target,MessagesSquare,HeartHandshake,Send,ClipboardList,FileText,History} from 'lucide-react';
+const links=[['overview','Client Overview',UserRound],['needs','Needs',Target],['consultations','Consultations',MessagesSquare],['services','Services',HeartHandshake],['referrals','Referrals',Send],['action-plan','Action Plan',ClipboardList],['documents','Documents',FileText],['timeline','Timeline',History]];
+export default function CaseSideNav(){return <nav className="lr-side"><small>Case navigation</small>{links.map(([id,label,Icon])=><a href={`#${id}`} key={id}><Icon size={14}/>{label}</a>)}<hr/><small>At a glance</small><a href="#outstanding">4 unresolved issues</a><a href="#follow-up">Follow-up tomorrow</a></nav>}
