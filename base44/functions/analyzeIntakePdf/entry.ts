@@ -9,7 +9,7 @@ export default async function(req: Request): Promise<Response> {
     const { fileUrl } = await req.json();
     if (!fileUrl || typeof fileUrl !== 'string') return Response.json({ error: 'A form image is required.' }, { status: 400 });
     const url = new URL(fileUrl);
-    const allowedHosts = ['base44.com', 'base44.app', 'wixstatic.com'];
+    const allowedHosts = ['base44.com', 'base44.app', 'wixstatic.com', 'supabase.co'];
     const isAllowedHost = allowedHosts.some(host => url.hostname === host || url.hostname.endsWith(`.${host}`));
     if (url.protocol !== 'https:' || !isAllowedHost) return Response.json({ error: 'Invalid file location.' }, { status: 400 });
     const fileResponse = await fetch(fileUrl);
