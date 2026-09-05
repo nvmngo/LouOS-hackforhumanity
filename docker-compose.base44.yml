@@ -1,0 +1,30 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.base44
+    working_dir: /app
+    # Bind-mount the cloned source so edits hot-reload; keep node_modules in a
+    # named volume so the container's npm install isn't shadowed by the host's.
+    volumes:
+      - ./:/app
+      - app_node_modules:/app/node_modules
+    # Platform-managed secrets (BASE44_API_KEY, ...) are delivered here and must
+    # be the LAST env_file so dashboard values always win over placeholders.
+    env_file:
+      - ./.env.base44-defaults
+      - /run/base44/app.env
+    environment:
+      # Passed through so the app can derive preview origins when needed.
+      - BASE44_PUBLIC_HOST_SUFFIX
+      - DENO_DIR=/root/.deno
+      # Keep the CLI non-interactive inside the container.
+      - CI=1
+    ports:
+      - "3000:5173"
+    command: sh -c "./base44-dev.sh"
+    tty: true
+    stdin_open: true
+
+volumes:
+  app_node_modules:
