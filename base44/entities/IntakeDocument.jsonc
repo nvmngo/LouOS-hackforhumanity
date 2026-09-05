@@ -1,0 +1,78 @@
+{
+  "name": "IntakeDocument",
+  "type": "object",
+  "properties": {
+    "file_url": {
+      "type": "string"
+    },
+    "file_name": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "preferred_name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "string"
+    },
+    "preferred_language": {
+      "type": "string"
+    },
+    "contact": {
+      "type": "string"
+    },
+    "safe_contact": {
+      "type": "string"
+    },
+    "dependants": {
+      "type": "string"
+    },
+    "accommodation": {
+      "type": "string"
+    },
+    "main_need": {
+      "type": "string"
+    },
+    "problems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "key_information": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "reviewed",
+        "saved"
+      ],
+      "default": "reviewed"
+    }
+  },
+  "required": [
+    "file_url",
+    "file_name",
+    "summary"
+  ]
+}
