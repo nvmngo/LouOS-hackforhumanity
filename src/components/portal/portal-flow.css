@@ -55,7 +55,11 @@
 .portal-intake .online-section-confirmation>header{margin-bottom:18px}
 .portal-intake .online-section-confirmation>header h2{text-transform:uppercase;letter-spacing:.12em;font-size:16px;color:#6c645f}
 .portal-intake .online-section-confirmation .online-fields{grid-template-columns:2fr 1fr;gap:42px}
-.portal-intake .online-submit{min-width:230px;margin-top:28px;background:#713629}
+.portal-intake .online-actions{display:flex;justify-content:flex-end;gap:16px;margin-top:30px}
+.portal-intake .online-submit,.portal-intake .online-cancel{min-width:210px;min-height:64px;padding:18px 30px;border-radius:999px;font-family:'DM Sans',sans-serif;font-size:20px;font-weight:900}
+.portal-intake .online-submit{margin-top:0;background:#713629}
+.portal-intake .online-cancel{border:2px solid #713629;background:#fff;color:#713629}
+.portal-intake .online-cancel:hover{transform:translateY(-3px);background:#f5c0ad;color:#292321}
 .portal-intake .paper-upload{border-color:#dfbfb2;background:#fff7f2}
 .portal-intake .paper-upload>svg{color:#c86549}
 .portal-status{display:flex;min-height:calc(100vh - 86px);flex-direction:column}
@@ -66,7 +70,7 @@
 .portal-status .processing svg,.portal-status .ai-saved>svg{color:#b95e43}
 @media(max-width:700px){
  .portal-flow-shell .mvp-top{width:calc(100% - 28px);margin-top:14px;padding:0 18px}.portal-flow-shell .mvp-step{display:block;font-size:14px}
- .portal-intake .online-report{padding:28px 22px}.portal-intake .online-section-confirmation{padding:22px 18px}.portal-intake .online-section-confirmation .online-fields{grid-template-columns:1fr;gap:22px}
+ .portal-intake .online-report{padding:28px 22px}.portal-intake .online-actions{flex-direction:column-reverse}.portal-intake .online-submit,.portal-intake .online-cancel{width:100%;min-width:0}.portal-intake .online-section-confirmation{padding:22px 18px}.portal-intake .online-section-confirmation .online-fields{grid-template-columns:1fr;gap:22px}
  .portal-flow{padding-top:28px}.portal-flow .portal-back{top:14px;left:14px;min-height:52px;padding:0 17px;font-size:16px}.portal-survey-modes .mode-grid{gap:18px}.portal-survey-modes .mode-card{aspect-ratio:auto;min-height:310px;border-radius:46%;padding:42px 25px}
  .portal-status .processing,.portal-status .ai-saved{padding:42px 24px}.portal-status .processing h1,.portal-status .ai-saved h1{font-size:32px}
 }
