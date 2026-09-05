@@ -6,6 +6,22 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
+import { Navigate } from 'react-router-dom';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import Login from '@/pages/Login';
+import Register from '@/pages/Register';
+import ForgotPassword from '@/pages/ForgotPassword';
+import ResetPassword from '@/pages/ResetPassword';
+import StaffShell from '@/components/louos/StaffShell';
+import ClientShell from '@/components/louos/ClientShell';
+import Dashboard from '@/pages/Dashboard';
+import IntakeFlow from '@/pages/IntakeFlow';
+import IntakeSummary from '@/pages/IntakeSummary';
+import CaseWorkspace from '@/pages/CaseWorkspace';
+import ReferralNetwork from '@/pages/ReferralNetwork';
+import CaseLists from '@/pages/CaseLists';
+import SessionReview from '@/pages/SessionReview';
+import FullReport from '@/pages/FullReport';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -34,7 +50,31 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      {/* Add your page Route elements here */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+        <Route element={<StaffShell />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/intake-summary" element={<IntakeSummary />} />
+          <Route path="/case" element={<CaseWorkspace />} />
+          <Route path="/network" element={<ReferralNetwork />} />
+          <Route path="/cases" element={<CaseLists />} />
+          <Route path="/referrals" element={<CaseLists />} />
+          <Route path="/session-review" element={<SessionReview />} />
+          <Route path="/report" element={<FullReport />} />
+          <Route path="/settings" element={<Dashboard />} />
+        </Route>
+        <Route element={<ClientShell />}>
+          <Route path="/intake" element={<IntakeFlow />} />
+          <Route path="/intake/language" element={<IntakeFlow />} />
+          <Route path="/intake/conversation" element={<IntakeFlow />} />
+          <Route path="/intake/guided" element={<IntakeFlow />} />
+          <Route path="/intake/paper" element={<IntakeFlow />} />
+          <Route path="/intake/processing" element={<IntakeFlow />} />
+        </Route>
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

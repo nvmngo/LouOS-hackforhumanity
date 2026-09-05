@@ -1,0 +1,5 @@
+import React from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
+import { LayoutDashboard, PlusCircle, BriefcaseBusiness, Send, Network, Settings, Leaf } from 'lucide-react';
+const nav=[['/','Dashboard',LayoutDashboard],['/intake','New Intake',PlusCircle],['/cases','Active Cases',BriefcaseBusiness],['/referrals','Referrals',Send],['/network','Service Network',Network]];
+export default function StaffShell(){return <div className="staff-shell"><aside className="sidebar"><div className="brand"><span className="brand-mark">Lou</span><b>OS</b><small>Technology handles the process.<br/>People provide the care.</small></div><nav>{nav.map(([to,label,Icon])=><NavLink key={to} to={to} end={to==='/'}><Icon size={19}/>{label}</NavLink>)}</nav><div className="sidebar-bottom"><NavLink to="/settings"><Settings size={18}/>Settings</NavLink><div className="demo-pill"><Leaf size={14}/><span>LouOS Prototype<br/><b>Demo Data Only</b></span></div></div></aside><main className="staff-main"><div className="prototype-banner">Prototype environment — all client information displayed is fictional demo data.</div><Outlet/></main></div>}
