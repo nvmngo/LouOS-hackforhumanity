@@ -1,0 +1,38 @@
+.portal-flow-shell{min-height:100vh;background:#fff7f2;color:#382722}
+.portal-flow-shell .mvp-top{width:calc(100% - 48px);min-height:64px;margin:22px auto 0;padding:0 24px;border:1px solid #efd8ce;border-radius:999px;background:#fffdfb;box-shadow:0 9px 24px #7136290d}
+.portal-flow-shell .mvp-step{margin-left:auto;font-size:15px;font-weight:500;letter-spacing:0;text-transform:none;color:#563a32}
+.portal-flow{min-height:calc(100vh - 86px);padding-top:42px}
+.portal-flow .portal-back{border-color:#e9cfc5;background:#fffdfb;color:#713629;box-shadow:0 6px 15px #71362910}
+.portal-flow .mvp-kicker{color:#b95e43}
+.portal-flow .mvp-btn{background:#713629}
+.portal-flow .mvp-btn:hover{background:#56271f}
+.portal-survey-modes .mvp-title{margin-bottom:30px}
+.portal-survey-modes .mvp-title h1{font-size:clamp(42px,6vw,68px);letter-spacing:-.04em}
+.portal-survey-modes .mvp-title p:last-child{font-size:15px}
+.portal-survey-modes .mode-grid{max-width:780px;gap:26px}
+.portal-survey-modes .mode-card{position:relative;aspect-ratio:1;border-radius:50%;padding:58px 36px 48px;align-items:center;justify-content:center;text-align:center;background:linear-gradient(145deg,#fffdfb,#fbe9e2);border-color:#f0d7cd;box-shadow:0 18px 42px #71362912}
+.portal-survey-modes .mode-icon{width:58px;height:58px;border-radius:16px;background:#fff;color:#d06d50;box-shadow:0 8px 20px #71362913}
+.portal-survey-modes .mode-card h2{font-size:29px;margin:22px 0 7px}
+.portal-survey-modes .mode-card p{flex:0;color:#755d55}
+.portal-survey-modes .mode-card .mvp-btn{position:absolute;right:24px;bottom:30px;width:48px;height:48px;margin:0;padding:0}
+.portal-intake .online-report,.portal-intake .survey-box{background:#fffdfb;border-color:#edd8cf;border-radius:24px;box-shadow:0 14px 34px #7136290b}
+.portal-intake .online-intro{margin-bottom:26px}
+.portal-intake .online-intro h1,.portal-intake .survey-box h1{color:#38221d}
+.portal-intake .online-section{border-top:1px solid #ead8cf;padding:28px 0}
+.portal-intake .online-section>header>span{border-radius:50%;background:#d46f52}
+.portal-intake .online-field input[type=text],.portal-intake .online-field input[type=date],.portal-intake .online-field textarea,.portal-intake .paper-upload input{border-color:#ddc9c0;background:#fffaf7}
+.portal-intake .online-options label,.portal-intake .online-checks label{border-color:#e4d2ca;background:#fffaf7}
+.portal-intake .online-field input[type=radio],.portal-intake .online-field input[type=checkbox]{accent-color:#c86549}
+.portal-intake .paper-upload{border-color:#dfbfb2;background:#fff7f2}
+.portal-intake .paper-upload>svg{color:#c86549}
+.portal-status{display:flex;min-height:calc(100vh - 86px);flex-direction:column}
+.portal-status .processing,.portal-status .ai-saved{width:min(600px,100%);margin:auto;padding:55px 44px;border:1px solid #edd7cd;border-radius:28px;background:#fffdfb;box-shadow:0 18px 44px #71362910}
+.portal-status .processing h1,.portal-status .ai-saved h1{font-size:38px;color:#38221d}
+.portal-status .pulse-logo{background:#dc7657;box-shadow:0 0 0 14px #f7ddd4}
+.portal-status .processing p{font-size:14px}
+.portal-status .processing svg,.portal-status .ai-saved>svg{color:#b95e43}
+@media(max-width:700px){
+ .portal-flow-shell .mvp-top{width:calc(100% - 28px);margin-top:14px;padding:0 18px}.portal-flow-shell .mvp-step{display:block;font-size:14px}
+ .portal-flow{padding-top:28px}.portal-survey-modes .mode-grid{gap:18px}.portal-survey-modes .mode-card{aspect-ratio:auto;min-height:310px;border-radius:46%;padding:42px 25px}
+ .portal-survey-modes .mode-card .mvp-btn{right:22px;bottom:22px}.portal-status .processing,.portal-status .ai-saved{padding:42px 24px}.portal-status .processing h1,.portal-status .ai-saved h1{font-size:32px}
+}
