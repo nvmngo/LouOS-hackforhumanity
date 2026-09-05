@@ -32,6 +32,7 @@ import CaseworkerWork from '@/pages/mvp/CaseworkerWork';
 import ExternalDecision from '@/pages/mvp/ExternalDecision';
 import ReferralMVP from '@/pages/mvp/ReferralMVP';
 import FinalReportMVP from '@/pages/mvp/FinalReportMVP';
+import CaseRecords from '@/pages/mvp/CaseRecords';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -74,6 +75,7 @@ const AuthenticatedApp = () => {
           <Route path="/external-help" element={<ExternalDecision />} />
           <Route path="/referral-mvp" element={<ReferralMVP />} />
           <Route path="/final-report" element={<FinalReportMVP />} />
+          <Route path="/database" element={<CaseRecords />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />
