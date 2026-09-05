@@ -1,19 +1,24 @@
 export const onlineReportSections = [
   {number:'1',title:'About you',fields:[
-    {id:'fullName',label:'Full name'},{id:'preferredName',label:'Preferred name'},{id:'age',label:'Age'},
-    {id:'preferredLanguage',label:'Preferred language'},{id:'phoneOrContact',label:'Phone or contact'},
-    {id:'safeContactPreference',label:'Safe contact preference',type:'radio',options:['Yes, call me','Text only','Never leave a message','Don’t contact me']},
-    {id:'childrenDependants',label:'Children or dependants (how many, and ages)',type:'textarea'},
-    {id:'currentAccommodation',label:'Current accommodation (where are you staying?)',type:'textarea'},
-    {id:'stayDuration',label:'How long can you stay there?'},
-    {id:'safeToday',label:'Are you safe there today?',type:'radio',options:['Yes','No','Unsure']}
+    {id:'fullName',label:'Your name'},
+    {id:'preferredName',label:'What should we call you?'},{id:'age',label:'Age'},
+    {id:'preferredLanguage',label:'Language you prefer'},{id:'phoneOrContact',label:'Phone (optional)'},
+    {id:'hasChildren',label:'Do you have any children?',type:'radio',options:['No','Yes']},
+    {id:'childrenDependants',label:'— how many?'},
+    {id:'currentAccommodation',label:'Where are you staying now?',type:'textarea'},
+    {id:'stayDuration',label:'How long can you stay there? (roughly)',type:'textarea'}
   ]},
-  {number:'2',title:'Current problems or crises',note:'Select everything that applies, then describe the main ones.',fields:[
-    {id:'problemCategories',label:'Problems that apply',type:'checkboxes',options:['Housing','Domestic or family violence','Safety','Financial','Legal','Health or wellbeing','Employment','Family or children','Social support','Other']},
-    ...[1,2,3].flatMap(number=>[{id:`problem${number}`,label:`Problem ${number}`,type:'textarea'},{id:`priority${number}`,label:`Problem ${number} priority`,type:'radio',options:['High','Medium','Low']}])
+  {number:'2',title:'What’s going on right now',note:'Tick anything that applies.',fields:[
+    {id:'problemCategories',label:'',type:'checkboxes',options:['Somewhere to live','Safety','Money','Health, or how I’m feeling','Family or children','Legal help','Work or study','Feeling alone','Something else']}
   ]},
-  {number:'3',title:'What would you like help with today?',note:'The most important support you need first.',fields:[{id:'helpToday',label:'Support needed',type:'textarea'}]},
-  {number:'4',title:'Your current situation',note:'Share as much or as little as you like.',fields:[{id:'reasonToday',label:'Why did you come to Lou’s Place today?',type:'textarea'},{id:'recentEvents',label:'What has been happening recently?',type:'textarea'}]},
-  {number:'5',title:'Important information',note:'Optional.',fields:[{id:'urgentAttention',label:'Does anything need urgent attention today?',type:'textarea'},{id:'otherFacts',label:'Other facts that would help us support you',type:'textarea'}]},
-  {number:'',title:'Confirmation',fields:[{id:'signature',label:'Your signature (type your full name)'},{id:'date',label:'Date',type:'date'}]}
+  {number:'3',title:'Your situation',fields:[
+    {id:'reasonToday',label:'Why did you come to Lou’s Place today?',type:'textarea'}
+  ]},
+  {number:'4',title:'Anything else',fields:[
+    {id:'helpToday',label:'Is there anything else we can help you with?',type:'textarea'}
+  ]},
+  {number:'',title:'Please sign below',fields:[
+    {id:'signature',label:'Your signature'},
+    {id:'date',label:'Today’s date',type:'date'}
+  ]}
 ];
