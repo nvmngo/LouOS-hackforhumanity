@@ -1,0 +1,72 @@
+{
+  "name": "ClientSubmission",
+  "type": "object",
+  "properties": {
+    "source": {
+      "type": "string",
+      "enum": [
+        "online",
+        "paper"
+      ]
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "preferred_name": {
+      "type": "string"
+    },
+    "contact": {
+      "type": "string"
+    },
+    "preferred_language": {
+      "type": "string"
+    },
+    "main_need": {
+      "type": "string"
+    },
+    "problem_categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "urgency": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "immediate"
+      ]
+    },
+    "summary": {
+      "type": "string"
+    },
+    "raw_answers": {
+      "type": "object"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "matching",
+        "matched",
+        "review_needed"
+      ],
+      "default": "matching"
+    },
+    "assigned_specialist_id": {
+      "type": "string"
+    },
+    "assigned_specialist_name": {
+      "type": "string"
+    },
+    "match_score": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "source",
+    "main_need",
+    "status"
+  ]
+}

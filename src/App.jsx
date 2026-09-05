@@ -33,10 +33,16 @@ import ExternalDecision from '@/pages/mvp/ExternalDecision';
 import ReferralMVP from '@/pages/mvp/ReferralMVP';
 import FinalReportMVP from '@/pages/mvp/FinalReportMVP';
 import CaseRecords from '@/pages/mvp/CaseRecords';
+import PublicPortalShell from '@/components/portal/PublicPortalShell';
+import PortalWelcome from '@/pages/portal/PortalWelcome';
+import PortalSurveyModes from '@/pages/portal/PortalSurveyModes';
+import PortalSurveyExperience from '@/pages/portal/PortalSurveyExperience';
+import PortalMatching from '@/pages/portal/PortalMatching';
+import PortalConfirmation from '@/pages/portal/PortalConfirmation';
 // Add page imports here
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings } = useAuth();
 
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
@@ -47,27 +53,23 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Handle authentication errors
-  if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
-      return null;
-    }
-  }
-
-  // Render the main app
+  // Render public routes and protect the staff workspace separately.
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route element={<PublicPortalShell />}>
+        <Route path="/" element={<PortalWelcome />} />
+        <Route path="/portal/survey" element={<PortalSurveyModes />} />
+        <Route path="/portal/survey/:mode" element={<PortalSurveyExperience />} />
+        <Route path="/portal/matching" element={<PortalMatching />} />
+        <Route path="/portal/confirmed" element={<PortalConfirmation />} />
+      </Route>
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
         <Route element={<MVPShell />}>
-          <Route path="/" element={<Welcome />} />
+          <Route path="/staff" element={<Welcome />} />
           <Route path="/survey" element={<SurveyModes />} />
           <Route path="/survey/:mode" element={<SurveyExperience />} />
           <Route path="/summary" element={<SummaryAllocation />} />

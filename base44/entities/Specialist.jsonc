@@ -1,0 +1,74 @@
+{
+  "name": "Specialist",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "expertise": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "years_experience": {
+      "type": "number"
+    },
+    "availability_status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "limited",
+        "unavailable"
+      ]
+    },
+    "available_days": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_available": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "current_caseload": {
+      "type": "number"
+    },
+    "maximum_caseload": {
+      "type": "number"
+    },
+    "location": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "full_name",
+    "role",
+    "expertise",
+    "languages",
+    "availability_status",
+    "current_caseload",
+    "maximum_caseload",
+    "active"
+  ]
+}

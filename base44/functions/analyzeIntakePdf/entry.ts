@@ -1,11 +1,7 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 import { secrets } from 'base44:runtime';
 
 export default async function(req: Request): Promise<Response> {
   try {
-    const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
     const { fileUrl } = await req.json();
     if (!fileUrl || typeof fileUrl !== 'string') return Response.json({ error: 'A form image is required.' }, { status: 400 });
     const url = new URL(fileUrl);

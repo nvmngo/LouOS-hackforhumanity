@@ -5,13 +5,14 @@ import {base44} from '@/api/base44Client';
 import OnlineReportSection from '@/components/mvp/online/OnlineReportSection';
 import {onlineReportSections} from '@/components/mvp/online/onlineReportFields';
 import '@/online-report.css';
-export default function OnlineReportForm(){
+export default function OnlineReportForm({onSubmitted}){
   const navigate=useNavigate();
   const [values,setValues]=useState({date:new Date().toISOString().slice(0,10)});
   const [busy,setBusy]=useState(false),[error,setError]=useState('');
   const update=(id,value)=>setValues(current=>({...current,[id]:value}));
   const submit=async event=>{event.preventDefault();setBusy(true);setError('');
     try{
+      if(onSubmitted){await onSubmitted(values);return;}
       const response=await base44.functions.invoke('chatCaseAssistant',{operation:'online_report',input:JSON.stringify(values)});
       const caseId=`LP-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`;
       sessionStorage.setItem('louosOnlineReport',JSON.stringify({caseId,answers:values,draft:response.data.result.draft}));
