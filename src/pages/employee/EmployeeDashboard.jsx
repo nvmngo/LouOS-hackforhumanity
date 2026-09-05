@@ -1,0 +1,7 @@
+import React,{useEffect,useState} from 'react';
+import {BriefcaseBusiness} from 'lucide-react';
+import {base44} from '@/api/base44Client';
+import employeeDemoCase from '@/data/employeeDemoCase';
+import {normalizeEmployeeCase} from '@/hooks/useEmployeeCase';
+import CaseCard from '@/components/employee/CaseCard';
+export default function EmployeeDashboard(){const[user,setUser]=useState(null),[cases,setCases]=useState([]),[loading,setLoading]=useState(true);useEffect(()=>{const load=async()=>{const me=await base44.auth.me();setUser(me);const specialists=await base44.entities.Specialist.filter({contact_email:me.email,active:true});let assigned=[];if(specialists[0]){const submissions=await base44.entities.ClientSubmission.filter({assigned_specialist_id:specialists[0].id,status:'matched'},'-created_date',30);const reports=await base44.entities.EmployeeCaseReport.filter({specialist_email:me.email});const done=new Set(reports.map(report=>report.submission_id));assigned=submissions.filter(item=>!done.has(item.id)).map(normalizeEmployeeCase);}setCases([employeeDemoCase,...assigned]);setLoading(false)};load()},[]);return <main className="mvp-main employee-dashboard"><header><div><p className="mvp-kicker">Dashboard</p><h1>Upcoming cases</h1><p>{user?.full_name||'Specialist'} · unresolved</p></div><span className="employee-count"><BriefcaseBusiness size={18}/>{cases.length}</span></header>{loading?<div className="employee-empty">Loading…</div>:<section className="employee-case-grid">{cases.map(item=><CaseCard key={item.id} item={item}/>)}</section>}</main>}

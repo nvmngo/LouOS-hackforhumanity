@@ -1,0 +1,104 @@
+{
+  "name": "ExternalOrganization",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "service_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "client_groups": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "eligibility": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "locations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "support_levels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "availability": {
+      "type": "string"
+    },
+    "referral_method": {
+      "type": "string"
+    },
+    "contact": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "name",
+    "service_types",
+    "client_groups",
+    "eligibility",
+    "languages",
+    "locations",
+    "support_levels",
+    "availability",
+    "referral_method",
+    "active"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "user"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

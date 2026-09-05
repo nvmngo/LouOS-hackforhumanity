@@ -1,0 +1,7 @@
+import React,{useState} from 'react';
+import {Link,useParams} from 'react-router-dom';
+import {ArrowLeft,ArrowRight} from 'lucide-react';
+import useEmployeeCase from '@/hooks/useEmployeeCase';
+import EmployeeCaseReport from '@/components/employee/EmployeeCaseReport';
+import EmployeeNoteTaker from '@/components/employee/EmployeeNoteTaker';
+export default function EmployeeCaseWorkspace(){const{caseId}=useParams();const{data,loading,error}=useEmployeeCase(caseId);const key=`employee-case-notes-${caseId}`;const[notes,setNotes]=useState(()=>JSON.parse(sessionStorage.getItem(key)||'[]'));const approve=note=>setNotes(current=>{const next=[...current,note];sessionStorage.setItem(key,JSON.stringify(next));return next});if(loading)return <main className="sr-page"><div className="sr-wrap">Loading…</div></main>;if(error)return <main className="sr-page"><div className="sr-wrap">{error}</div></main>;return <main className="sr-page"><div className="sr-wrap"><Link className="employee-icon-back" to="/staff" aria-label="Dashboard"><ArrowLeft/></Link><header className="sr-heading"><div><p>Case report · Before</p><h1>{data.clientName}</h1><p>{data.caseId}</p></div><span className={`employee-urgency ${data.urgency}`}>{data.urgency}</span></header><div className="sr-layout"><EmployeeCaseReport caseData={data} notes={notes}/><EmployeeNoteTaker caseData={data} onApprove={approve}/></div><footer className="sr-footer"><Link to={`/staff/cases/${caseId}/decision`}>Complete interview <ArrowRight size={16}/></Link></footer></div></main>}

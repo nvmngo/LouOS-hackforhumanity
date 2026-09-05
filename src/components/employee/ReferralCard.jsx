@@ -1,0 +1,3 @@
+import React from 'react';
+import {Check} from 'lucide-react';
+export default function ReferralCard({item,selected,onSelect}){return <article className={`employee-referral-card ${selected?'selected':''}`}><header><strong>{item.score}%</strong><span>{item.availability}</span></header><h2>{item.name}</h2><p>{item.service}</p><small>{item.reason}</small><div className="employee-tags">{(item.service_types||[]).slice(0,3).map(tag=><span key={tag}>{tag}</span>)}</div><button className="mvp-btn full" onClick={onSelect}>{selected?<><Check size={17}/>Selected</>:'Select'}</button></article>}

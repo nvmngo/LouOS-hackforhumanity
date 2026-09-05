@@ -1,0 +1,131 @@
+{
+  "name": "EmployeeCaseReport",
+  "type": "object",
+  "properties": {
+    "submission_id": {
+      "type": "string"
+    },
+    "case_id": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "specialist_email": {
+      "type": "string"
+    },
+    "specialist_name": {
+      "type": "string"
+    },
+    "case_summary": {
+      "type": "string"
+    },
+    "main_need": {
+      "type": "string"
+    },
+    "urgency": {
+      "type": "string"
+    },
+    "problem_categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "interview_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "external_support_needed": {
+      "type": "boolean"
+    },
+    "selected_organizations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "service": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "report_text": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "finalised"
+      ],
+      "default": "finalised"
+    }
+  },
+  "required": [
+    "submission_id",
+    "case_id",
+    "client_name",
+    "specialist_email",
+    "case_summary",
+    "main_need",
+    "urgency",
+    "problem_categories",
+    "interview_notes",
+    "external_support_needed",
+    "selected_organizations",
+    "report_text",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

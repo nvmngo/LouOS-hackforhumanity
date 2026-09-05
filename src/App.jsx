@@ -39,6 +39,11 @@ import PortalSurveyModes from '@/pages/portal/PortalSurveyModes';
 import PortalSurveyExperience from '@/pages/portal/PortalSurveyExperience';
 import PortalMatching from '@/pages/portal/PortalMatching';
 import PortalConfirmation from '@/pages/portal/PortalConfirmation';
+import EmployeeDashboard from '@/pages/employee/EmployeeDashboard';
+import EmployeeCaseWorkspace from '@/pages/employee/EmployeeCaseWorkspace';
+import EmployeeDecision from '@/pages/employee/EmployeeDecision';
+import EmployeeReferrals from '@/pages/employee/EmployeeReferrals';
+import EmployeeFinalReport from '@/pages/employee/EmployeeFinalReport';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -69,7 +74,11 @@ const AuthenticatedApp = () => {
       </Route>
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
         <Route element={<MVPShell />}>
-          <Route path="/staff" element={<Welcome />} />
+          <Route path="/staff" element={<EmployeeDashboard />} />
+          <Route path="/staff/cases/:caseId" element={<EmployeeCaseWorkspace />} />
+          <Route path="/staff/cases/:caseId/decision" element={<EmployeeDecision />} />
+          <Route path="/staff/cases/:caseId/referrals" element={<EmployeeReferrals />} />
+          <Route path="/staff/cases/:caseId/final" element={<EmployeeFinalReport />} />
           <Route path="/survey" element={<SurveyModes />} />
           <Route path="/survey/:mode" element={<SurveyExperience />} />
           <Route path="/summary" element={<SummaryAllocation />} />
