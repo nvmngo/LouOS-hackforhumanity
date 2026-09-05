@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
-import GoogleIcon from "@/components/GoogleIcon";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import {DEMO_EMPLOYEE,startDemoEmployeeSession} from "@/lib/demoEmployee";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,13 +16,18 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   // Post-login destination (e.g. the MCP OAuth consent page sends users here
   // with returnTo so the grant flow can resume). Same-origin paths only.
-  const returnTo = safeReturnTo();
+  const returnTo = safeReturnTo("/staff");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
+      if(email===DEMO_EMPLOYEE.email&&password===DEMO_EMPLOYEE.password){
+        startDemoEmployeeSession();
+        window.location.href=returnTo;
+        return;
+      }
       await base44.auth.loginViaEmailPassword(email, password);
       window.location.href = returnTo;
     } catch (err) {
@@ -32,45 +37,13 @@ export default function Login() {
     }
   };
 
-  const handleGoogle = () => {
-    base44.auth.loginWithProvider("google", returnTo);
-  };
-
   return (
     <AuthLayout
       icon={LogIn}
-      title="Welcome back"
-      subtitle="Log in to your account"
-      footer={
-        <>
-          Don't have an account?{" "}
-          <Link
-            to={"/register" + (returnTo !== "/" ? "?returnTo=" + encodeURIComponent(returnTo) : "")}
-            className="text-primary font-medium hover:underline"
-          >
-            Create one
-          </Link>
-        </>
-      }
+      title="Employee login"
+      subtitle="Use your work email"
+      footer="Lou’s Place staff access"
     >
-      <Button
-        variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6"
-        onClick={handleGoogle}
-      >
-        <GoogleIcon className="w-5 h-5 mr-2" />
-        Continue with Google
-      </Button>
-
-      <div className="relative mb-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-3 text-muted-foreground">or</span>
-        </div>
-      </div>
-
       {error && (
         <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
           {error}
@@ -79,7 +52,7 @@ export default function Login() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">Work email</Label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -87,7 +60,7 @@ export default function Login() {
               type="email"
               autoComplete="email"
               autoFocus
-              placeholder="you@example.com"
+              placeholder="name@lousplace.com.au"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="pl-10 h-12"
@@ -127,6 +100,12 @@ export default function Login() {
           )}
         </Button>
       </form>
+      <div className="mt-5 rounded-xl border bg-muted/40 p-4 text-sm">
+        <p className="font-semibold">Demo specialist</p>
+        <p className="mt-2"><b>Email:</b> {DEMO_EMPLOYEE.email}</p>
+        <p><b>Password:</b> {DEMO_EMPLOYEE.password}</p>
+        <Button type="button" variant="outline" className="mt-3 w-full" onClick={()=>{setEmail(DEMO_EMPLOYEE.email);setPassword(DEMO_EMPLOYEE.password)}}>Use demo login</Button>
+      </div>
     </AuthLayout>
   );
 }

@@ -1,0 +1,6 @@
+import {useEffect,useState} from 'react';
+import {base44} from '@/api/base44Client';
+import employeeDemoCase from '@/data/employeeDemoCase';
+
+export const normalizeEmployeeCase=record=>{const raw=record.raw_answers||{};return{id:record.id,caseId:`CASE-${record.id.slice(-6).toUpperCase()}`,clientName:record.client_name||raw.fullName||'Client',preferredName:record.preferred_name||raw.preferredName||'',mainNeed:record.main_need||raw.helpToday||'Support',urgency:record.urgency||'medium',categories:record.problem_categories||raw.problemCategories||[],summary:record.summary||raw.reasonToday||'No summary recorded.',language:record.preferred_language||raw.preferredLanguage||'',contact:record.contact||raw.phoneOrContact||'',safeContact:raw.safeContactPreference||'',dependants:raw.dependants||'',accommodation:raw.accommodation||'',createdDate:record.created_date};};
+export default function useEmployeeCase(caseId){const[data,setData]=useState(null),[loading,setLoading]=useState(true),[error,setError]=useState('');useEffect(()=>{if(caseId==='demo-sarah'){setData(employeeDemoCase);setLoading(false);return;}base44.entities.ClientSubmission.get(caseId).then(record=>setData(normalizeEmployeeCase(record))).catch(()=>setError('Case not found.')).finally(()=>setLoading(false))},[caseId]);return{data,loading,error};}

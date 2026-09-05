@@ -1,0 +1,4 @@
+import React from 'react';
+import {Link,useParams} from 'react-router-dom';
+import {Building2,FileCheck2} from 'lucide-react';
+export default function EmployeeDecision(){const{caseId}=useParams();return <main className="mvp-main decision employee-decision"><p className="mvp-kicker">Next step</p><h1>External support?</h1><div className="decision-grid"><Link className="decision-card" to={`/staff/cases/${caseId}/final?external=no`}><FileCheck2/><h2>No</h2><p>Save final report</p></Link><Link className="decision-card" to={`/staff/cases/${caseId}/referrals`}><Building2/><h2>Yes</h2><p>Find organisations</p></Link></div></main>}

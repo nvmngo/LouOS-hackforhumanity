@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import {isDemoEmployee} from '@/lib/demoEmployee';
 
 const DefaultFallback = () => (
   <div className="fixed inset-0 flex items-center justify-center">
@@ -11,12 +12,17 @@ const DefaultFallback = () => (
 
 export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthenticatedElement }) {
   const { isAuthenticated, isLoadingAuth, authChecked, authError, checkUserAuth } = useAuth();
+  const demoEmployee = isDemoEmployee();
 
   useEffect(() => {
     if (!authChecked && !isLoadingAuth) {
       checkUserAuth();
     }
   }, [authChecked, isLoadingAuth, checkUserAuth]);
+
+  if (demoEmployee) {
+    return <Outlet />;
+  }
 
   if (isLoadingAuth || !authChecked) {
     return fallback;
