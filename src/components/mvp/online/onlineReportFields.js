@@ -3,8 +3,7 @@ export const onlineReportSections = [
     {id:'fullName',label:'Your name'},
     {id:'preferredName',label:'What should we call you?'},{id:'age',label:'Age'},
     {id:'preferredLanguage',label:'Language you prefer'},{id:'phoneOrContact',label:'Phone (optional)'},
-    {id:'hasChildren',label:'Do you have any children?',type:'radio',options:['No','Yes']},
-    {id:'childrenDependants',label:'— how many?'},
+    {id:'childrenDependants',label:'Do you have any children?',type:'conditionalCount',yesId:'hasChildren'},
     {id:'currentAccommodation',label:'Where are you staying now?',type:'textarea'},
     {id:'stayDuration',label:'How long can you stay there? (roughly)',type:'textarea'}
   ]},
@@ -16,9 +15,5 @@ export const onlineReportSections = [
   ]},
   {number:'4',title:'Anything else',fields:[
     {id:'helpToday',label:'Is there anything else we can help you with?',type:'textarea'}
-  ]},
-  {number:'',title:'Please sign below',fields:[
-    {id:'signature',label:'Your signature'},
-    {id:'date',label:'Today’s date',type:'date'}
   ]}
 ];

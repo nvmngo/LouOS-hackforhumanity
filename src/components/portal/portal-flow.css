@@ -20,7 +20,7 @@
 .portal-intake .online-intro{max-width:none;margin-bottom:34px;padding-bottom:20px;border-bottom:3px solid #282321}
 .portal-intake .online-intro h1{margin:0;color:#b65331;font-family:'DM Sans',sans-serif;font-size:38px;font-weight:700;letter-spacing:-.025em}
 .portal-intake .online-form-title{margin:6px 0 18px;color:#6f6864;font-size:17px;font-weight:700;letter-spacing:.25em;text-transform:uppercase}
-.portal-intake .online-intro>p:last-child{color:#282321;font-size:17px;line-height:1.48}
+.portal-intake .online-intro>p:last-child{color:#282321;font-size:19px;line-height:1.6}
 .portal-intake .online-form-vertical{display:block}
 .portal-intake .online-section{padding:36px 0;border-top:1px solid #d7cec8}
 .portal-intake .online-form-vertical .online-section:first-child{padding-top:0;border-top:0}
@@ -31,12 +31,17 @@
 .portal-intake .online-fields{grid-template-columns:1fr;gap:28px}
 .portal-intake .online-field:has(textarea),.portal-intake .online-wide{grid-column:auto}
 .portal-intake .online-field>span,.portal-intake .online-field legend{margin-bottom:8px;color:#282321;font-size:18px;font-weight:600}
-.portal-intake .online-field input[type=text],.portal-intake .online-field input[type=date],.portal-intake .online-field textarea{padding:12px 1px;border:0;border-bottom:1px solid #4b4643;border-radius:0;background:transparent;box-shadow:none;font-size:18px}
-.portal-intake .online-field textarea{min-height:96px;line-height:36px;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 35px,#cfc7c2 36px);background-attachment:local}
+.portal-intake .online-field input[type=text],.portal-intake .online-field input[type=date],.portal-intake .online-field input[type=number],.portal-intake .online-field textarea{padding:14px 16px;border:1px solid #8d837d;border-radius:8px;background:#fff;box-shadow:none;font-size:19px;line-height:1.5}
+.portal-intake .online-field input:focus,.portal-intake .online-field textarea:focus{border-color:#b65331;outline:3px solid #f3d7ce;outline-offset:1px}
+.portal-intake .online-field textarea{min-height:120px;line-height:1.6;background-image:none}
 .portal-intake .online-options,.portal-intake .online-checks{display:grid;grid-template-columns:1fr;gap:0}
 .portal-intake .online-options label,.portal-intake .online-checks label{min-height:52px;padding:10px 0;border:0;border-bottom:1px solid #d4cbc5;border-radius:0;background:transparent;font-size:18px;line-height:1.45}
 .portal-intake .online-field input[type=radio],.portal-intake .online-field input[type=checkbox]{width:24px;height:24px;flex:none;appearance:none;border:1px solid #4b4643;border-radius:0;background:#fff;accent-color:#b65331}
 .portal-intake .online-field input[type=radio]:checked,.portal-intake .online-field input[type=checkbox]:checked{background:#b65331;box-shadow:inset 0 0 0 5px #fff}
+.portal-intake .online-children>div{display:flex;align-items:center;gap:16px}
+.portal-intake .online-children label{display:flex;align-items:center;gap:10px;font-size:18px}
+.portal-intake .online-children input[type=number]{width:130px}
+.portal-intake .online-children input[type=number]:disabled{background:#f2eeeb;color:#8b827c}
 .portal-intake .online-section-4{margin-top:8px}
 .portal-intake .online-section-confirmation{margin-top:16px;padding:24px 30px 28px;border:2px solid #302b28;background:#f8f5f2}
 .portal-intake .online-section-confirmation>header{margin-bottom:18px}
