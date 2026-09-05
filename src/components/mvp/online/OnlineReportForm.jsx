@@ -21,12 +21,12 @@ export default function OnlineReportForm({onSubmitted,cancelPath}){
   };
   const renderSection=section=><OnlineReportSection key={section.title} section={section} values={values} onChange={update}/>;
   return <form className="online-report" onSubmit={submit}>
-    <header className="online-intro"><h1>Lou’s Place</h1><p className="online-form-title">WELCOME FORM</p><p><strong>Take your time, and leave blank anything you’d rather not answer.</strong> Someone on our team is happy to help you fill this in.</p></header>
+    <header className="online-intro"><p className="online-form-title">WELCOME FORM</p><h1>Lou’s Place</h1><p><strong>Take your time, and leave blank anything you’d rather not answer.</strong> Someone on our team is happy to help you fill this in.</p></header>
     <div className="online-form-vertical">{onlineReportSections.map(renderSection)}</div>
     {error&&<p className="online-error" role="alert">{error}</p>}
     <div className="online-actions">
-      {cancelPath&&<button type="button" className="online-cancel" onClick={()=>navigate(cancelPath)} disabled={busy}>Cancel</button>}
       <button className="mvp-btn online-submit" disabled={busy}>{busy?<><LoaderCircle className="online-spin"/>Preparing summary…</>:<>Submit Form <Send size={22}/></>}</button>
+      {cancelPath&&<button type="button" className="online-cancel" onClick={()=>navigate(cancelPath)} disabled={busy}>Cancel</button>}
     </div>
   </form>;
 }

@@ -24,8 +24,8 @@
 .portal-intake .online-report{padding:42px 46px;background:#fff;border:1px solid #dfd7d2;border-radius:3px;box-shadow:0 16px 40px #4a302219;font-family:'DM Sans',sans-serif}
 .portal-intake .survey-box{background:#fffdfb;border-color:#edd8cf;border-radius:24px;box-shadow:0 14px 34px #7136290b}
 .portal-intake .online-intro{max-width:none;margin-bottom:34px;padding-bottom:20px;border-bottom:3px solid #282321}
-.portal-intake .online-intro h1{margin:0;color:#b65331;font-family:'DM Sans',sans-serif;font-size:38px;font-weight:700;letter-spacing:-.025em}
-.portal-intake .online-form-title{margin:6px 0 18px;color:#6f6864;font-size:17px;font-weight:700;letter-spacing:.25em;text-transform:uppercase}
+.portal-intake .online-intro h1{margin:8px 0 18px;color:#b65331;font-family:'DM Sans',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.015em}
+.portal-intake .online-form-title{margin:0;color:#282321;font-size:44px;font-weight:900;line-height:1.05;letter-spacing:-.035em;text-transform:uppercase}
 .portal-intake .online-intro>p:last-child{color:#282321;font-size:19px;line-height:1.6}
 .portal-intake .online-form-vertical{display:block}
 .portal-intake .online-section{padding:36px 0;border-top:1px solid #d7cec8}
@@ -55,10 +55,10 @@
 .portal-intake .online-section-confirmation>header{margin-bottom:18px}
 .portal-intake .online-section-confirmation>header h2{text-transform:uppercase;letter-spacing:.12em;font-size:16px;color:#6c645f}
 .portal-intake .online-section-confirmation .online-fields{grid-template-columns:2fr 1fr;gap:42px}
-.portal-intake .online-actions{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:16px;margin-top:30px}
-.portal-intake .online-submit,.portal-intake .online-cancel{width:250px;min-height:64px;padding:18px 30px;border-radius:999px;font-family:'DM Sans',sans-serif;font-size:20px;font-weight:900}
-.portal-intake .online-submit{margin-top:0;background:#713629}
-.portal-intake .online-cancel{border:2px solid #713629;background:#fff;color:#713629}
+.portal-intake .online-actions{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;margin-top:30px}
+.portal-intake .online-submit,.portal-intake .online-cancel{border-radius:999px;font-family:'DM Sans',sans-serif;font-weight:900}
+.portal-intake .online-submit{width:250px;min-height:64px;margin-top:0;padding:18px 30px;background:#713629;font-size:20px}
+.portal-intake .online-cancel{width:215px;min-height:56px;padding:14px 24px;border:2px solid #713629;background:#fff;color:#713629;font-size:18px}
 .portal-intake .online-cancel:hover{transform:translateY(-3px);background:#f5c0ad;color:#292321}
 .portal-intake .paper-upload{border-color:#dfbfb2;background:#fff7f2}
 .portal-intake .paper-upload>svg{color:#c86549}
@@ -70,7 +70,7 @@
 .portal-status .processing svg,.portal-status .ai-saved>svg{color:#b95e43}
 @media(max-width:700px){
  .portal-flow-shell .mvp-top{width:calc(100% - 28px);margin-top:14px;padding:0 18px}.portal-flow-shell .mvp-step{display:block;font-size:14px}
- .portal-intake .online-report{padding:28px 22px}.portal-intake .online-actions{flex-direction:column-reverse}.portal-intake .online-submit,.portal-intake .online-cancel{width:100%;min-width:0}.portal-intake .online-section-confirmation{padding:22px 18px}.portal-intake .online-section-confirmation .online-fields{grid-template-columns:1fr;gap:22px}
+ .portal-intake .online-report{padding:28px 22px}.portal-intake .online-actions{flex-direction:column}.portal-intake .online-submit{width:100%}.portal-intake .online-cancel{width:90%;min-width:0}.portal-intake .online-section-confirmation{padding:22px 18px}.portal-intake .online-section-confirmation .online-fields{grid-template-columns:1fr;gap:22px}
  .portal-flow{padding-top:28px}.portal-flow .portal-back{top:14px;left:14px;min-height:52px;padding:0 17px;font-size:16px}.portal-survey-modes .mode-grid{gap:18px}.portal-survey-modes .mode-card{aspect-ratio:auto;min-height:310px;border-radius:46%;padding:42px 25px}
  .portal-status .processing,.portal-status .ai-saved{padding:42px 24px}.portal-status .processing h1,.portal-status .ai-saved h1{font-size:32px}
 }
