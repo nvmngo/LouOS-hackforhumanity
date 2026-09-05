@@ -22,7 +22,7 @@ if [ ! -f base44/.app.jsonc ]; then
 EOF
   elif [ -n "$BASE44_API_KEY" ]; then
     echo "[base44-dev] No app id set — creating a new Base44 app to link against"
-    base44 link --create --name "LouOS" -y
+    base44 link --create --name "LouOS"
   else
     echo "[base44-dev] ERROR: BASE44_API_KEY is required to run the Base44 backend." >&2
     exit 1
@@ -30,4 +30,6 @@ EOF
 fi
 
 echo "[base44-dev] Starting base44 dev..."
+# base44 dev rejects BASE44_APP_ID (it strictly requires base44/.app.jsonc).
+unset BASE44_APP_ID
 exec base44 dev
