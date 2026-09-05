@@ -11,11 +11,12 @@
 .portal-survey-modes .mvp-title h1{font-family:'DM Sans',sans-serif;font-size:clamp(42px,6vw,68px);font-weight:800;letter-spacing:-.04em}
 .portal-survey-modes .mvp-title p:last-child{font-size:15px}
 .portal-survey-modes .mode-grid{max-width:780px;gap:26px}
-.portal-survey-modes .mode-card{position:relative;aspect-ratio:1;border:1px solid #f0d7cd;border-radius:50%;padding:58px 36px 48px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(145deg,#fffdfb,#fbe9e2);color:#382722;box-shadow:0 18px 42px #71362912;cursor:pointer}
-.portal-survey-modes .mode-card:active{background:#f27b42;border-color:#f27b42;color:#292321}
+.portal-survey-modes .mode-card{position:relative;aspect-ratio:1;border:1px solid #f0d7cd;border-radius:50%;padding:58px 36px 48px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(145deg,#fffdfb,#fbe9e2);color:#382722;box-shadow:0 18px 42px #71362912;cursor:pointer;transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease}
+.portal-survey-modes .mode-card:hover{transform:translateY(-10px);background:#f5c0ad;border-color:#e98c6e;box-shadow:0 26px 52px #71362926}
+.portal-survey-modes .mode-card:active{transform:translateY(-4px);background:#f27b42;border-color:#f27b42;color:#292321}
 .portal-survey-modes .mode-card:focus-visible{outline:4px solid #713629;outline-offset:5px}
 .portal-survey-modes .mode-icon{width:58px;height:58px;border-radius:16px;background:#fff;color:#d06d50;box-shadow:0 8px 20px #71362913}
-.portal-survey-modes .mode-card h2{font-family:'DM Sans',sans-serif;font-size:29px;font-weight:800;margin:22px 0 7px}
+.portal-survey-modes .mode-card h2{font-family:'DM Sans',sans-serif;font-size:36px;font-weight:900;line-height:1.05;margin:22px 0 9px}
 .portal-survey-modes .mode-card p{flex:0;color:#755d55}
 .portal-survey-modes .mode-card:active p{color:#292321}
 .portal-intake .online-report{padding:42px 46px;background:#fff;border:1px solid #dfd7d2;border-radius:3px;box-shadow:0 16px 40px #4a302219;font-family:'DM Sans',sans-serif}
