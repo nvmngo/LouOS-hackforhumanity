@@ -2,7 +2,7 @@
 .portal-flow-shell .mvp-top{display:none}
 .portal-flow-shell .mvp-step{margin-left:auto;font-size:15px;font-weight:500;letter-spacing:0;text-transform:none;color:#563a32}
 .portal-flow{min-height:calc(100vh - 86px);padding-top:42px}
-.portal-flow .portal-back{position:fixed;z-index:30;top:24px;left:24px;min-height:62px;padding:0 25px;display:inline-flex;align-items:center;justify-content:center;gap:11px;border:2px solid #e0b9aa;border-radius:999px;background:#fffdfb;color:#713629;box-shadow:0 10px 24px #7136291c;font-family:'DM Sans',sans-serif;font-size:19px;font-weight:900;transition:transform .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease}
+.portal-flow .portal-back{position:fixed;z-index:30;top:24px;left:24px;min-height:56px;padding:0 20px;display:inline-flex;align-items:center;justify-content:center;gap:9px;border:2px solid #e0b9aa;border-radius:999px;background:#fffdfb;color:#713629;box-shadow:0 10px 24px #7136291c;font-family:'DM Sans',sans-serif;font-size:17px;font-weight:900;transition:transform .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease}
 .portal-flow .portal-back:hover{transform:translateY(-7px);background:#f5c0ad;color:#292321;box-shadow:0 18px 32px #7136292b}
 .portal-flow .portal-back:focus-visible{outline:4px solid #713629;outline-offset:4px}
 .portal-flow .mvp-kicker{color:#b95e43}
@@ -67,6 +67,6 @@
 @media(max-width:700px){
  .portal-flow-shell .mvp-top{width:calc(100% - 28px);margin-top:14px;padding:0 18px}.portal-flow-shell .mvp-step{display:block;font-size:14px}
  .portal-intake .online-report{padding:28px 22px}.portal-intake .online-section-confirmation{padding:22px 18px}.portal-intake .online-section-confirmation .online-fields{grid-template-columns:1fr;gap:22px}
- .portal-flow{padding-top:28px}.portal-flow .portal-back{top:14px;left:14px;min-height:56px;padding:0 19px;font-size:17px}.portal-survey-modes .mode-grid{gap:18px}.portal-survey-modes .mode-card{aspect-ratio:auto;min-height:310px;border-radius:46%;padding:42px 25px}
+ .portal-flow{padding-top:28px}.portal-flow .portal-back{top:14px;left:14px;min-height:52px;padding:0 17px;font-size:16px}.portal-survey-modes .mode-grid{gap:18px}.portal-survey-modes .mode-card{aspect-ratio:auto;min-height:310px;border-radius:46%;padding:42px 25px}
  .portal-status .processing,.portal-status .ai-saved{padding:42px 24px}.portal-status .processing h1,.portal-status .ai-saved h1{font-size:32px}
 }

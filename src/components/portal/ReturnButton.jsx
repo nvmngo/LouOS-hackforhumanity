@@ -1,5 +1,5 @@
 import React from 'react';
 import {ArrowLeft} from 'lucide-react';
-import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
-export default function ReturnButton(){return <Link to="/" aria-label="Go back to the home page" className="portal-back"><ArrowLeft size={25} aria-hidden="true"/><span>Go Back</span></Link>}
+export default function ReturnButton(){const navigate=useNavigate();return <button type="button" onClick={()=>navigate(-1)} aria-label="Go back to the previous page" className="portal-back"><ArrowLeft size={22} aria-hidden="true"/><span>Go Back</span></button>}
