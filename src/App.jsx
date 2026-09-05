@@ -22,6 +22,16 @@ import ReferralNetwork from '@/pages/ReferralNetwork';
 import CaseLists from '@/pages/CaseLists';
 import SessionReview from '@/pages/SessionReview';
 import FullReport from '@/pages/FullReport';
+import '@/mvp.css';
+import MVPShell from '@/components/mvp/MVPShell';
+import Welcome from '@/pages/mvp/Welcome';
+import SurveyModes from '@/pages/mvp/SurveyModes';
+import SurveyExperience from '@/pages/mvp/SurveyExperience';
+import SummaryAllocation from '@/pages/mvp/SummaryAllocation';
+import CaseworkerWork from '@/pages/mvp/CaseworkerWork';
+import ExternalDecision from '@/pages/mvp/ExternalDecision';
+import ReferralMVP from '@/pages/mvp/ReferralMVP';
+import FinalReportMVP from '@/pages/mvp/FinalReportMVP';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -55,24 +65,15 @@ const AuthenticatedApp = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
-        <Route element={<StaffShell />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/intake-summary" element={<IntakeSummary />} />
-          <Route path="/case" element={<CaseWorkspace />} />
-          <Route path="/network" element={<ReferralNetwork />} />
-          <Route path="/cases" element={<CaseLists />} />
-          <Route path="/referrals" element={<CaseLists />} />
-          <Route path="/session-review" element={<SessionReview />} />
-          <Route path="/report" element={<FullReport />} />
-          <Route path="/settings" element={<Dashboard />} />
-        </Route>
-        <Route element={<ClientShell />}>
-          <Route path="/intake" element={<IntakeFlow />} />
-          <Route path="/intake/language" element={<IntakeFlow />} />
-          <Route path="/intake/conversation" element={<IntakeFlow />} />
-          <Route path="/intake/guided" element={<IntakeFlow />} />
-          <Route path="/intake/paper" element={<IntakeFlow />} />
-          <Route path="/intake/processing" element={<IntakeFlow />} />
+        <Route element={<MVPShell />}>
+          <Route path="/" element={<Welcome />} />
+          <Route path="/survey" element={<SurveyModes />} />
+          <Route path="/survey/:mode" element={<SurveyExperience />} />
+          <Route path="/summary" element={<SummaryAllocation />} />
+          <Route path="/casework" element={<CaseworkerWork />} />
+          <Route path="/external-help" element={<ExternalDecision />} />
+          <Route path="/referral-mvp" element={<ReferralMVP />} />
+          <Route path="/final-report" element={<FinalReportMVP />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />

@@ -1,0 +1,4 @@
+import React from 'react';
+import {Link} from 'react-router-dom';
+import {ArrowRight} from 'lucide-react';
+export default function Welcome(){return <main className="mvp-main mvp-hero"><section><p className="mvp-kicker">Welcome to Lou’s Place</p><h1>Tell your story once.</h1><p className="mvp-lead">LouOS helps organise the information around your care, so our team can spend more time listening and supporting you.</p><Link className="mvp-btn" to="/survey">Get started <ArrowRight size={18}/></Link></section><aside className="mvp-art"><blockquote>“Technology handles the process. People provide the care.”<small>LouOS frontend prototype</small></blockquote></aside></main>}
