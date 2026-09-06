@@ -1,17 +1,15 @@
 import { optionalSecret } from '../../shared/optionalSecret.ts';
 
-const allowedFileHosts = [
-  'base44.com',
-  'base44.app',
-  'base44cdn.com',
-  'wixstatic.com',
-  'wixmp.com',
-  'supabase.co',
-  'storage.googleapis.com',
-  'googleusercontent.com',
-];
-
 const loopbackHosts = new Set(['localhost', '127.0.0.1', '[::1]']);
+
+function isPrivateIpv4(hostname: string): boolean {
+  const parts = hostname.split('.').map(Number);
+  if (parts.length !== 4 || parts.some((part) => !Number.isInteger(part) || part < 0 || part > 255)) return false;
+  return parts[0] === 10 || parts[0] === 127 || parts[0] === 0 ||
+    (parts[0] === 169 && parts[1] === 254) ||
+    (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) ||
+    (parts[0] === 192 && parts[1] === 168);
+}
 
 function isTrustedFileUrl(fileUrl: string, req: Request): boolean {
   let fileLocation: URL;
@@ -22,13 +20,16 @@ function isTrustedFileUrl(fileUrl: string, req: Request): boolean {
     return false;
   }
 
-  const isAllowedHostedFile =
-    fileLocation.protocol === 'https:' &&
-    allowedFileHosts.some(
-      (host) => fileLocation.hostname === host || fileLocation.hostname.endsWith(`.${host}`),
-    );
+  const hostname = fileLocation.hostname.toLowerCase();
+  const isPublicHttps = fileLocation.protocol === 'https:' &&
+    !fileLocation.username &&
+    !fileLocation.password &&
+    !loopbackHosts.has(hostname) &&
+    !hostname.endsWith('.local') &&
+    !hostname.includes(':') &&
+    !isPrivateIpv4(hostname);
 
-  if (isAllowedHostedFile) return true;
+  if (isPublicHttps) return true;
 
   // `base44 dev` stores uploads on its own HTTP loopback origin. Trust that
   // origin only when the function proxy confirms it is also running locally.
@@ -37,11 +38,7 @@ function isTrustedFileUrl(fileUrl: string, req: Request): boolean {
 
   try {
     const localApi = new URL(apiUrl);
-    return (
-      localApi.protocol === 'http:' &&
-      loopbackHosts.has(localApi.hostname) &&
-      fileLocation.origin === localApi.origin
-    );
+    return localApi.protocol === 'http:' && loopbackHosts.has(localApi.hostname) && fileLocation.origin === localApi.origin;
   } catch {
     return false;
   }
