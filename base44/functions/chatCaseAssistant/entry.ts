@@ -45,20 +45,22 @@ export default async function(req: Request): Promise<Response> {
     if (JSON.stringify(minimalDraft).length > 15000) return Response.json({ error: 'The draft is too large to analyse.' }, { status: 400 });
     const task = operation === 'consultation_notes' ? `Extract every useful fact from the specialist's consultation notes and map each fact to one supported fieldPath in the same living case report. Return separate suggestions. Use Add for list fields and Update for scalar fields. Distinguish client-reported facts, discussion, decisions, consent, and specialist assessment. Never infer consent, safety, a diagnosis, a referral, or an agreement. Do not modify the supplied report. assistantMessage should briefly say the structured suggestions are ready.\nConsultation notes: ${input}` : operation === 'quick_notes' ? `Analyse every relevant fact in the new quick notes and return separate suggested Add, Update, or Remove changes. Use an exact supported problem category for area, or Main Need, or Key Information. Include an information-only Legal suggestion when legal help is explicitly declined. Keep draft exactly unchanged. assistantMessage should briefly say the suggestions are ready.\nQuick notes: ${input}` : operation === 'online_report' ? `Transform this completed Lou's Place Welcome Form into the complete structured Case Support Report shape. Populate only Case Overview, Client Information, Presenting Situation, Safety, Support Needs, Relevant Background, and Client Goals & Preferences where directly supported. Leave Consultation, Support Plan, Actions, Referrals, Follow-Up, and Closure empty because they require specialist discussion. Map hasChildren and childrenCount to dependants, currentAccommodation to accommodation, stayDuration to recentChanges, reasonToday to the presenting situation, and otherHelp to relevant background. Map supportAreas exactly as follows: Somewhere to live to Accommodation; Safety to Safety support; Money to Financial assistance; Health, or how I’m feeling to Health; Family or children to Family / child support; Legal help to Legal support; Work or study to Employment; Feeling alone to Social support; and Something else to Other, using supportOther as its detail. Use reasonToday as the primary need only when it clearly states what support is wanted; otherwise use the first selected support area or General support. A Safety tick means safety support was requested, not that a professional safety assessment was completed. Do not infer consent, contact preferences, urgency, goals, or safety level from the signature or blank fields. For missing scalar fields use an empty string, not invented content. Set status New, enoughInformation true, return no suggestions, and add intake provenance with source AI extraction from survey and suggestionStatus Pending.\nOnline form JSON: ${input}` : `Update the draft using the caseworker's latest answer. Preserve existing facts unless explicitly corrected. Return the full updated draft, then ask the single most useful missing question in assistantMessage. If enough information exists, set enoughInformation true and state that the report is ready instead of asking another question. Return no suggestions.\nCurrent question: ${currentQuestion}\nCaseworker answer: ${input}`;
     const prompt = `${louosCaseAssistantContext}\n\nKnowledge layer:\n${louosKnowledgeContext}\n\nCurrent draft JSON:\n${JSON.stringify(minimalDraft)}\n\nOperation:\n${task}`;
-    const apiKey = optionalSecret('GEMINI_API_KEY');
-    if (!apiKey) return Response.json({ error: 'GEMINI_API_KEY is not set for this app. Add it with: base44 secrets set GEMINI_API_KEY=your-key' }, { status: 503 });
-    const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent';
+    const apiKey = optionalSecret('OPENAI_API_KEY');
+    if (!apiKey) return Response.json({ error: 'OPENAI_API_KEY is not set for this app. Add it with: base44 secrets set OPENAI_API_KEY=your-key' }, { status: 503 });
+    const endpoint = 'https://api.openai.com/v1/chat/completions';
     const selectedSchema = operation === 'consultation_notes' ? consultationResponseSchema : operation === 'online_report' ? intakeResponseSchema : responseSchema;
-    const requestOptions = {method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json',responseSchema:selectedSchema,temperature:0.1,maxOutputTokens:5000}})};
-    let geminiResponse = await fetch(endpoint, requestOptions);
-    if ([429,503].includes(geminiResponse.status)) {
+    // JSON mode does not enforce a schema, so the expected shape travels in the prompt.
+    const schemaPrompt = `${prompt}\n\nReturn only JSON matching this exact shape:\n${JSON.stringify(selectedSchema)}`;
+    const requestOptions = {method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${apiKey}`},body:JSON.stringify({model:optionalSecret('OPENAI_MODEL')||'gpt-4o-mini',messages:[{role:'user',content:schemaPrompt}],response_format:{type:'json_object'},temperature:0.1,max_tokens:5000})};
+    let aiResponse = await fetch(endpoint, requestOptions);
+    if ([429,503].includes(aiResponse.status)) {
       await new Promise(resolve => setTimeout(resolve, 900));
-      geminiResponse = await fetch(endpoint, requestOptions);
+      aiResponse = await fetch(endpoint, requestOptions);
     }
-    const result = await geminiResponse.json();
-    if (!geminiResponse.ok) return Response.json({ error: result?.error?.message || 'Gemini could not analyse this case information.' }, { status: 502 });
-    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) return Response.json({ error: 'Gemini returned no case information.' }, { status: 422 });
+    const result = await aiResponse.json();
+    if (!aiResponse.ok) return Response.json({ error: result?.error?.message || 'OpenAI could not analyse this case information.' }, { status: 502 });
+    const text = result?.choices?.[0]?.message?.content;
+    if (!text) return Response.json({ error: 'OpenAI returned no case information.' }, { status: 422 });
     return Response.json({ result: JSON.parse(text) });
   } catch (error) {
     return Response.json({ error: error instanceof Error ? error.message : 'Case analysis failed.' }, { status: 500 });

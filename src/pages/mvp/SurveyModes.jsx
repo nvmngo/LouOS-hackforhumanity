@@ -2,5 +2,5 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import ReturnButton from '@/components/portal/ReturnButton';
 import {FileText,ClipboardPenLine,ArrowRight} from 'lucide-react';
-const modes=[['online','Online Report',ClipboardPenLine,'Complete the intake questions online, then let Gemini prepare the summary report.'],['paper','Paper',FileText,'Use a paper intake form with help from a team member.']];
+const modes=[['online','Online Report',ClipboardPenLine,'Complete the intake questions online, then let the assistant prepare the summary report.'],['paper','Paper',FileText,'Use a paper intake form with help from a team member.']];
 export default function SurveyModes(){return <main className="mvp-main"><ReturnButton variant="inline" to="/employee" label="Back to the dashboard"/><header className="mvp-title"><p className="mvp-kicker">Choose what feels comfortable</p><h1>How would you like to begin?</h1><p>All options use fictional demo information in this prototype.</p></header><div className="mode-grid">{modes.map(([id,title,Icon,text])=><article className="mode-card" key={id}><div className="mode-icon"><Icon/></div><h2>{title}</h2><p>{text}</p><Link className="mvp-btn" to={`/survey/${id}`}>Choose {title}<ArrowRight size={17}/></Link></article>)}</div></main>}
