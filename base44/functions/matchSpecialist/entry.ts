@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
+import { ensurePrototypeSpecialists } from '../../shared/prototypeSpecialistRoster.ts';
 
 const text = (value: unknown) => typeof value === 'string' ? value.slice(0, 2000).trim() : '';
 const list = (value: unknown) => Array.isArray(value) ? value.filter(item => typeof item === 'string').slice(0, 12) : [];
@@ -132,11 +133,17 @@ export default async function(req: Request): Promise<Response> {
     };
     const entities = base44.asServiceRole.entities;
     const submission = await entities.ClientSubmission.create(submissionData);
-    const [specialists, assignedSubmissions, finalisedReports] = await Promise.all([
+    let [specialists, assignedSubmissions, finalisedReports] = await Promise.all([
       entities.Specialist.filter({ active: true }),
       entities.ClientSubmission.filter({ status: 'matched' }, '-created_date', 5000),
       entities.EmployeeCaseReport.list('-created_date', 5000)
     ]);
+    // The local backend starts with an empty Specialist table, which would send
+    // every intake to review_needed. Provision the prototype roster once.
+    if (!specialists.length) {
+      await ensurePrototypeSpecialists(entities);
+      specialists = await entities.Specialist.filter({ active: true });
+    }
     const completedSubmissionIds = new Set(finalisedReports.map((report: any) => report.submission_id));
     const upcomingBySpecialist = assignedSubmissions.reduce((counts: Map<string, number>, item: any) => {
       if (item.assigned_specialist_id && !completedSubmissionIds.has(item.id)) {

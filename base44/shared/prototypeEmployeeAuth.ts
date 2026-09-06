@@ -1,5 +1,7 @@
 // Prototype-only employee authentication for the five fictional specialists.
 // Replace this with verified Base44 users before handling real client data.
+import { ensurePrototypeSpecialists } from './prototypeSpecialistRoster.ts';
+
 const encoder = new TextEncoder();
 
 const passwordHashes: Record<string, string> = {
@@ -47,10 +49,20 @@ export async function verifyPrototypeEmployeeToken(token: unknown) {
   }
 }
 
+// Looks up the active specialist profile for a prototype employee, provisioning
+// the fictional roster first if it is missing (the local backend starts empty
+// after every `base44 dev` restart).
+export async function findPrototypeSpecialist(email: string, entities: any) {
+  const specialists = await entities.Specialist.filter({contact_email: email, active: true});
+  if (specialists[0]) return specialists[0];
+  await ensurePrototypeSpecialists(entities);
+  const provisioned = await entities.Specialist.filter({contact_email: email, active: true});
+  return provisioned[0] || null;
+}
+
 export async function getPrototypeEmployee(body: any, entities: any) {
   const email = await verifyPrototypeEmployeeToken(body?.employeeToken);
   if (!email) return null;
-  const specialists = await entities.Specialist.filter({contact_email: email, active: true});
-  const specialist = specialists[0];
+  const specialist = await findPrototypeSpecialist(email, entities);
   return specialist ? {email, full_name: specialist.full_name, specialist} : null;
 }
