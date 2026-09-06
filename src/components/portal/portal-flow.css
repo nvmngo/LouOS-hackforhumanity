@@ -56,7 +56,6 @@
 .portal-intake .online-children-ask{font-size:19px;color:#716963}
 .portal-intake .online-children-yes{display:flex;align-items:center;gap:16px}
 .portal-intake .online-children input[type=number]{width:130px}
-.portal-intake .online-children input[type=number]:disabled{background:#f2eeeb;color:#8b827c}
 .portal-intake .online-section-4{margin-top:8px}
 .portal-intake .online-section-confirmation{margin-top:16px;padding:24px 30px 28px;border:2px solid #302b28;background:#f8f5f2}
 .portal-intake .online-section-confirmation>header{margin-bottom:18px}
