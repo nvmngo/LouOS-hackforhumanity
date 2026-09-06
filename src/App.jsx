@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -14,8 +14,6 @@ import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
-import StaffShell from '@/components/louos/StaffShell';
-import ClientShell from '@/components/louos/ClientShell';
 import Dashboard from '@/pages/Dashboard';
 import IntakeFlow from '@/pages/IntakeFlow';
 import IntakeSummary from '@/pages/IntakeSummary';
@@ -26,7 +24,6 @@ import SessionReview from '@/pages/SessionReview';
 import FullReport from '@/pages/FullReport';
 import '@/mvp.css';
 import MVPShell from '@/components/mvp/MVPShell';
-import Welcome from '@/pages/mvp/Welcome';
 import SurveyModes from '@/pages/mvp/SurveyModes';
 import SurveyExperience from '@/pages/mvp/SurveyExperience';
 import SummaryAllocation from '@/pages/mvp/SummaryAllocation';
@@ -64,44 +61,74 @@ const AuthenticatedApp = () => {
   // Render public routes and protect the staff workspace separately.
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/employee/login" element={<Login />} />
+      <Route path="/employee/register" element={<Register />} />
+      <Route path="/employee/forgot-password" element={<ForgotPassword />} />
+      <Route path="/employee/reset-password" element={<ResetPassword />} />
       <Route path="/" element={<RoleSelection />} />
       <Route element={<PublicPortalShell />}>
-        <Route path="/portal" element={<PortalWelcome />} />
-        <Route path="/portal/survey" element={<PortalSurveyModes />} />
-        <Route path="/portal/survey/:mode" element={<PortalSurveyExperience />} />
-        <Route path="/portal/matching" element={<PortalMatching />} />
-        <Route path="/portal/confirmed" element={<PortalConfirmation />} />
+        <Route path="/user" element={<PortalWelcome />} />
+        <Route path="/user/survey" element={<PortalSurveyModes />} />
+        <Route path="/user/survey/:mode" element={<PortalSurveyExperience />} />
+        <Route path="/user/matching" element={<PortalMatching />} />
+        <Route path="/user/confirmation" element={<PortalConfirmation />} />
       </Route>
-      <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+      <Route element={<ProtectedRoute unauthenticatedElement={<EmployeeLoginRedirect />} />}>
         <Route element={<EmployeeAccessRoute/>}>
           <Route element={<MVPShell />}>
-            <Route path="/staff" element={<EmployeeDashboard />} />
-            <Route path="/staff/cases/:caseId" element={<AssignedCaseAccessRoute/>}>
+            <Route path="/employee" element={<EmployeeDashboard />} />
+            <Route path="/employee/cases/:caseId" element={<AssignedCaseAccessRoute/>}>
               <Route index element={<EmployeeCaseWorkspace />} />
               <Route path="decision" element={<EmployeeDecision />} />
               <Route path="referrals" element={<EmployeeReferrals />} />
               <Route path="final" element={<EmployeeFinalReport />} />
             </Route>
-            <Route path="/survey" element={<SurveyModes />} />
-            <Route path="/survey/:mode" element={<SurveyExperience />} />
-            <Route path="/summary" element={<SummaryAllocation />} />
-            <Route path="/casework" element={<CaseworkerWork />} />
-            <Route path="/casework/:recordId" element={<CaseworkerWork />} />
-            <Route path="/external-help" element={<ExternalDecision />} />
-            <Route path="/referral-mvp" element={<ReferralMVP />} />
-            <Route path="/final-report" element={<FinalReportMVP />} />
-            <Route path="/database" element={<CaseRecords />} />
+            <Route path="/employee/survey" element={<SurveyModes />} />
+            <Route path="/employee/survey/:mode" element={<SurveyExperience />} />
+            <Route path="/employee/summary" element={<SummaryAllocation />} />
+            <Route path="/employee/casework" element={<CaseworkerWork />} />
+            <Route path="/employee/casework/:recordId" element={<CaseworkerWork />} />
+            <Route path="/employee/external-help" element={<ExternalDecision />} />
+            <Route path="/employee/referrals" element={<ReferralMVP />} />
+            <Route path="/employee/final-report" element={<FinalReportMVP />} />
+            <Route path="/employee/database" element={<CaseRecords />} />
           </Route>
         </Route>
       </Route>
+      <Route path="/portal/*" element={<LegacyPrefixRedirect from="/portal" to="/user" />} />
+      <Route path="/staff/*" element={<LegacyPrefixRedirect from="/staff" to="/employee" />} />
+      <Route path="/login" element={<LegacyRedirect to="/employee/login" />} />
+      <Route path="/register" element={<LegacyRedirect to="/employee/register" />} />
+      <Route path="/forgot-password" element={<LegacyRedirect to="/employee/forgot-password" />} />
+      <Route path="/reset-password" element={<LegacyRedirect to="/employee/reset-password" />} />
+      <Route path="/survey/*" element={<LegacyPrefixRedirect from="/survey" to="/employee/survey" />} />
+      <Route path="/summary" element={<LegacyRedirect to="/employee/summary" />} />
+      <Route path="/casework/*" element={<LegacyPrefixRedirect from="/casework" to="/employee/casework" />} />
+      <Route path="/external-help" element={<LegacyRedirect to="/employee/external-help" />} />
+      <Route path="/referral-mvp" element={<LegacyRedirect to="/employee/referrals" />} />
+      <Route path="/final-report" element={<LegacyRedirect to="/employee/final-report" />} />
+      <Route path="/database" element={<LegacyRedirect to="/employee/database" />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };
+
+function EmployeeLoginRedirect() {
+  const location = useLocation();
+  const returnTo = encodeURIComponent(location.pathname + location.search);
+  return <Navigate to={`/employee/login?returnTo=${returnTo}`} replace />;
+}
+
+function LegacyRedirect({to}) {
+  const location = useLocation();
+  return <Navigate to={`${to}${location.search}${location.hash}`} replace />;
+}
+
+function LegacyPrefixRedirect({from,to}) {
+  const location = useLocation();
+  const path = location.pathname.replace(from, to);
+  return <Navigate to={`${path}${location.search}${location.hash}`} replace />;
+}
 
 
 function App() {

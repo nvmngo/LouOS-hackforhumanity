@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import { saveEmployeeSession } from "@/lib/employeeSession";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -15,17 +16,22 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   // Post-login destination (e.g. the MCP OAuth consent page sends users here
   // with returnTo so the grant flow can resume). Same-origin paths only.
-  const returnTo = safeReturnTo("/staff");
+  const returnTo = safeReturnTo("/employee");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      await base44.auth.loginViaEmailPassword(email, password);
+      if(email.trim().toLowerCase().endsWith('@example.org')){
+        const response=await base44.functions.invoke('employeePortal',{action:'login',email:email.trim().toLowerCase(),password});
+        saveEmployeeSession(response.data);
+      }else{
+        await base44.auth.loginViaEmailPassword(email, password);
+      }
       window.location.href = returnTo;
     } catch (err) {
-      setError(err.message || "Invalid email or password");
+      setError(err?.response?.data?.error || err.message || "Invalid email or password");
     } finally {
       setLoading(false);
     }
@@ -65,7 +71,7 @@ export default function Login() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            <Link to="/forgot-password" className="text-xs text-primary hover:underline">
+            <Link to="/employee/forgot-password" className="text-xs text-primary hover:underline">
               Forgot password?
             </Link>
           </div>
