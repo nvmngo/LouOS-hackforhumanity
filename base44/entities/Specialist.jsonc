@@ -50,6 +50,22 @@
     "maximum_caseload": {
       "type": "number"
     },
+    "upcoming_case_count": {
+      "type": "integer",
+      "description": "Number of matched cases that have not yet been finalised.",
+      "default": 0
+    },
+    "congestion_level": {
+      "type": "string",
+      "description": "Current workload pressure, calculated from upcoming cases as a proportion of maximum caseload.",
+      "enum": [
+        "low",
+        "moderate",
+        "high",
+        "at_capacity"
+      ],
+      "default": "low"
+    },
     "location": {
       "type": "string"
     },

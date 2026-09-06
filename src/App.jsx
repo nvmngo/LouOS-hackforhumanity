@@ -8,6 +8,8 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 import { Navigate } from 'react-router-dom';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import EmployeeAccessRoute from '@/components/EmployeeAccessRoute';
+import AssignedCaseAccessRoute from '@/components/AssignedCaseAccessRoute';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
@@ -75,21 +77,25 @@ const AuthenticatedApp = () => {
         <Route path="/portal/confirmed" element={<PortalConfirmation />} />
       </Route>
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
-        <Route element={<MVPShell />}>
-          <Route path="/staff" element={<EmployeeDashboard />} />
-          <Route path="/staff/cases/:caseId" element={<EmployeeCaseWorkspace />} />
-          <Route path="/staff/cases/:caseId/decision" element={<EmployeeDecision />} />
-          <Route path="/staff/cases/:caseId/referrals" element={<EmployeeReferrals />} />
-          <Route path="/staff/cases/:caseId/final" element={<EmployeeFinalReport />} />
-          <Route path="/survey" element={<SurveyModes />} />
-          <Route path="/survey/:mode" element={<SurveyExperience />} />
-          <Route path="/summary" element={<SummaryAllocation />} />
-          <Route path="/casework" element={<CaseworkerWork />} />
-          <Route path="/casework/:recordId" element={<CaseworkerWork />} />
-          <Route path="/external-help" element={<ExternalDecision />} />
-          <Route path="/referral-mvp" element={<ReferralMVP />} />
-          <Route path="/final-report" element={<FinalReportMVP />} />
-          <Route path="/database" element={<CaseRecords />} />
+        <Route element={<EmployeeAccessRoute/>}>
+          <Route element={<MVPShell />}>
+            <Route path="/staff" element={<EmployeeDashboard />} />
+            <Route path="/staff/cases/:caseId" element={<AssignedCaseAccessRoute/>}>
+              <Route index element={<EmployeeCaseWorkspace />} />
+              <Route path="decision" element={<EmployeeDecision />} />
+              <Route path="referrals" element={<EmployeeReferrals />} />
+              <Route path="final" element={<EmployeeFinalReport />} />
+            </Route>
+            <Route path="/survey" element={<SurveyModes />} />
+            <Route path="/survey/:mode" element={<SurveyExperience />} />
+            <Route path="/summary" element={<SummaryAllocation />} />
+            <Route path="/casework" element={<CaseworkerWork />} />
+            <Route path="/casework/:recordId" element={<CaseworkerWork />} />
+            <Route path="/external-help" element={<ExternalDecision />} />
+            <Route path="/referral-mvp" element={<ReferralMVP />} />
+            <Route path="/final-report" element={<FinalReportMVP />} />
+            <Route path="/database" element={<CaseRecords />} />
+          </Route>
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />

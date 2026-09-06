@@ -1,13 +1,57 @@
 import { secrets } from 'base44:runtime';
 
+const allowedFileHosts = [
+  'base44.com',
+  'base44.app',
+  'base44cdn.com',
+  'wixstatic.com',
+  'wixmp.com',
+  'supabase.co',
+  'storage.googleapis.com',
+  'googleusercontent.com',
+];
+
+const loopbackHosts = new Set(['localhost', '127.0.0.1', '[::1]']);
+
+function isTrustedFileUrl(fileUrl: string, req: Request): boolean {
+  let fileLocation: URL;
+
+  try {
+    fileLocation = new URL(fileUrl);
+  } catch {
+    return false;
+  }
+
+  const isAllowedHostedFile =
+    fileLocation.protocol === 'https:' &&
+    allowedFileHosts.some(
+      (host) => fileLocation.hostname === host || fileLocation.hostname.endsWith(`.${host}`),
+    );
+
+  if (isAllowedHostedFile) return true;
+
+  // `base44 dev` stores uploads on its own HTTP loopback origin. Trust that
+  // origin only when the function proxy confirms it is also running locally.
+  const apiUrl = req.headers.get('Base44-Api-Url');
+  if (!apiUrl) return false;
+
+  try {
+    const localApi = new URL(apiUrl);
+    return (
+      localApi.protocol === 'http:' &&
+      loopbackHosts.has(localApi.hostname) &&
+      fileLocation.origin === localApi.origin
+    );
+  } catch {
+    return false;
+  }
+}
+
 export default async function(req: Request): Promise<Response> {
   try {
     const { fileUrl } = await req.json();
     if (!fileUrl || typeof fileUrl !== 'string') return Response.json({ error: 'A form image is required.' }, { status: 400 });
-    const url = new URL(fileUrl);
-    const allowedHosts = ['base44.com', 'base44.app', 'base44cdn.com', 'wixstatic.com', 'wixmp.com', 'supabase.co', 'storage.googleapis.com', 'googleusercontent.com'];
-    const isAllowedHost = allowedHosts.some(host => url.hostname === host || url.hostname.endsWith(`.${host}`));
-    if (url.protocol !== 'https:' || !isAllowedHost) return Response.json({ error: 'Invalid file location.' }, { status: 400 });
+    if (!isTrustedFileUrl(fileUrl, req)) return Response.json({ error: 'Invalid file location.' }, { status: 400 });
     const fileResponse = await fetch(fileUrl);
     if (!fileResponse.ok) return Response.json({ error: 'The uploaded image could not be read.' }, { status: 400 });
     const mimeType = (fileResponse.headers.get('content-type') || '').split(';')[0];

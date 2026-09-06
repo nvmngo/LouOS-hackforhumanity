@@ -64,6 +64,20 @@
     "report_text": {
       "type": "string"
     },
+    "case_report": {
+      "type": "object",
+      "description": "Structured snapshot of the Living Case Report at finalisation."
+    },
+    "report_history": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "report_version": {
+      "type": "integer",
+      "default": 1
+    },
     "status": {
       "type": "string",
       "enum": [
