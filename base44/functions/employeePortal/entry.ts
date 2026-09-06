@@ -61,6 +61,25 @@ export default async function(req: Request): Promise<Response> {
       return Response.json({case: submission});
     }
 
+    // Mid-consultation save used by the referral pathway, which records referral
+    // progress on the living case report before the case is finalised.
+    if (action === 'saveCaseReport') {
+      const caseId = clean(body?.caseId, 100);
+      const submission = caseId ? await entities.ClientSubmission.get(caseId) : null;
+      if (!submission || submission.status !== 'matched' || submission.assigned_specialist_id !== employee.specialist.id) {
+        return Response.json({error: 'This case is not assigned to you.'}, {status: 403});
+      }
+      const caseReport = body?.caseReport && typeof body.caseReport === 'object' ? body.caseReport : null;
+      if (!caseReport || JSON.stringify(caseReport).length > 100000) return Response.json({error: 'The case report is invalid or too large.'}, {status: 400});
+      const reportHistory = Array.isArray(body?.reportHistory) ? body.reportHistory : [];
+      await entities.ClientSubmission.update(submission.id, {
+        case_report: caseReport,
+        report_history: reportHistory,
+        report_version: Number(body?.reportVersion) || (Number(submission.report_version) || 1) + 1
+      });
+      return Response.json({saved: true});
+    }
+
     if (action === 'saveFinalReport') {
       const caseId = clean(body?.caseId, 100);
       const submission = caseId ? await entities.ClientSubmission.get(caseId) : null;

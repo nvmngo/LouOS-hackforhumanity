@@ -45,6 +45,19 @@
       "type": "string"
     },
     "referral_method": {
+      "type": "string",
+      "description": "Human-readable referral process, e.g. 'Warm referral by phone'."
+    },
+    "referral_method_type": {
+      "type": "string",
+      "enum": ["email", "phone", "online_form", "in_person"],
+      "description": "Drives which referral action the employee sees. Defaults to email-style handling if unset."
+    },
+    "referral_url": {
+      "type": "string",
+      "description": "Link to the service's own referral form, if referral_method_type is online_form."
+    },
+    "referral_notes": {
       "type": "string"
     },
     "contact": {
@@ -52,6 +65,90 @@
     },
     "notes": {
       "type": "string"
+    },
+    "suburb": {
+      "type": "string"
+    },
+    "postcode": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "number"
+    },
+    "longitude": {
+      "type": "number"
+    },
+    "service_area": {
+      "type": "string",
+      "description": "Free-text description of the geographic area the service actually covers."
+    },
+    "delivery_mode": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["in_person", "phone", "online", "outreach"]
+      }
+    },
+    "hours": {
+      "type": "object",
+      "description": "Structured opening hours used to compute an honest 'open now' status. Leave a day null/omitted if unknown rather than guessing.",
+      "properties": {
+        "mon": { "type": "object", "properties": { "open": { "type": "string" }, "close": { "type": "string" } } },
+        "tue": { "type": "object", "properties": { "open": { "type": "string" }, "close": { "type": "string" } } },
+        "wed": { "type": "object", "properties": { "open": { "type": "string" }, "close": { "type": "string" } } },
+        "thu": { "type": "object", "properties": { "open": { "type": "string" }, "close": { "type": "string" } } },
+        "fri": { "type": "object", "properties": { "open": { "type": "string" }, "close": { "type": "string" } } },
+        "sat": { "type": "object", "properties": { "open": { "type": "string" }, "close": { "type": "string" } } },
+        "sun": { "type": "object", "properties": { "open": { "type": "string" }, "close": { "type": "string" } } },
+        "is24_7": { "type": "boolean", "default": false },
+        "hours_note": { "type": "string" }
+      }
+    },
+    "eligibility_structured": {
+      "type": "object",
+      "description": "Structured eligibility used for the deterministic gate. Only set a field when the source is explicit about it; leave unset otherwise so the gate defaults to 'needs confirmation'.",
+      "properties": {
+        "gender": { "type": "array", "items": { "type": "string" } },
+        "min_age": { "type": "number" },
+        "max_age": { "type": "number" },
+        "service_area_postcodes": { "type": "array", "items": { "type": "string" } },
+        "dfv_related": { "type": "boolean" },
+        "income_tested": { "type": "boolean" },
+        "dependants_ok": { "type": "boolean" },
+        "other_requirements": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "availability_status": {
+      "type": "string",
+      "enum": ["accepting_referrals", "not_accepting_referrals", "unknown"],
+      "default": "unknown"
+    },
+    "capacity_note": {
+      "type": "string",
+      "default": "Not publicly available — contact provider to confirm"
+    },
+    "availability_checked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string",
+      "description": "e.g. 'curated' or 'organisation_website'."
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "retrieved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low"]
     },
     "active": {
       "type": "boolean",

@@ -7,7 +7,7 @@ const Field=({label,value,wide=false})=><div className={`sr-field ${wide?'wide':
 const TextList=({items,empty='Not provided'})=>items?.length?<ul className="sr-key-list">{items.map((item,index)=><li key={`${item}-${index}`}>{item}</li>)}</ul>:<p className="sr-muted">{empty}</p>;
 const Section=({title,subtitle='',children})=><section className="sr-full-section"><header><h3>{title}</h3>{subtitle&&<span>{subtitle}</span>}</header>{children}</section>;
 
-function CaseSnapshot({report}){
+export function CaseSnapshot({report}){
   const {caseOverview:overview,clientInformation:client,presentingSituation:situation,safety,supportNeeds:needs,clientGoals:goals,supportPlan,actions}=report;
   const nextAction=actions.find(item=>item.status!=='Completed'&&item.status!=='Cancelled');
   return <section className="sr-snapshot"><header><div><span>30-second case snapshot</span><h2>{client.preferredName||client.fullName} · {displayValue(overview.urgency)} priority</h2></div><span className={`employee-urgency ${(overview.urgency||'unknown').toLowerCase()}`}>{overview.status||'New'}</span></header><div className="sr-snapshot-grid"><div><span>Current situation</span><p>{displayValue(situation.summary)}</p></div><div><span>Primary need</span><p>{displayValue(needs.primaryNeed)}</p></div><div><span>Safety</span><p>{safety.concerns?.[0]||safety.level}</p></div><div><span>Client goal</span><p>{displayValue(goals.immediateGoal)}</p></div><div><span>Agreed solution</span><p>{supportPlan.agreedSolution||'To be discussed'}</p></div><div><span>Next action</span><p>{nextAction?.description||'Complete specialist consultation'}</p></div></div></section>;

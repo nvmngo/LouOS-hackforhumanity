@@ -14,12 +14,10 @@ export default function EmployeeFinalReport(){
   const{data,loading,error:caseError}=useEmployeeCase(caseId);
   const external=new URLSearchParams(window.location.search).get('external')==='yes';
   const notes=JSON.parse(sessionStorage.getItem(`employee-case-notes-${caseId}`)||'[]');
-  const selected=external?JSON.parse(sessionStorage.getItem(`employee-referral-${caseId}`)||'null'):null;
   const[saving,setSaving]=useState(false),[saved,setSaved]=useState(false),[error,setError]=useState('');
   if(loading)return <main className="mvp-main">Loading…</main>;
   if(caseError||!data)return <main className="mvp-main"><div className="employee-empty">{caseError||'Case not found.'}</div></main>;
   let report=applyReportSuggestions(data.report,notes.map(note=>typeof note==='string'?{fieldPath:'consultation.clientReported',value:note}:note));
-  if(selected)report={...report,referrals:[...report.referrals,{organisation:selected.name,reason:selected.reason||selected.service,consent:'To be confirmed',referralDate:'',status:'Proposed',outcome:''}]};
   const sections=[
     ['A. Case Overview',`${compact(report.caseOverview.status)} · ${compact(report.caseOverview.urgency)} · ${compact(report.caseOverview.assignedSpecialist)}`],
     ['B. Client Information',`${compact(report.clientInformation.fullName)} · ${compact(report.clientInformation.dependants)} · ${compact(report.clientInformation.accommodation)}`],
@@ -42,7 +40,7 @@ export default function EmployeeFinalReport(){
       const me=await currentEmployee();
       report={...report,caseOverview:{...report.caseOverview,assignedSpecialist:me.full_name||report.caseOverview.assignedSpecialist,status:'Active'},provenance:[...(report.provenance||[]),...suggestionHistory(notes,me.full_name||me.email)]};
       const history=[...(data.report?.provenance||[]),...suggestionHistory(notes,me.full_name||me.email)];
-      const payload={submission_id:data.id,case_id:data.caseId,client_name:data.clientName,specialist_email:me.email,specialist_name:me.full_name||'',case_summary:report.presentingSituation.summary,main_need:report.supportNeeds.primaryNeed,urgency:data.urgency,problem_categories:report.supportNeeds.secondaryNeeds,interview_notes:notes.map(note=>typeof note==='string'?note:note.final_value||note.finalValue||note.value),external_support_needed:external,selected_organizations:selected?[{organization_id:selected.id,name:selected.name,service:selected.service,reason:selected.reason}]:[],report_text:reportText,case_report:report,report_history:history,report_version:2,status:'finalised'};
+      const payload={submission_id:data.id,case_id:data.caseId,client_name:data.clientName,specialist_email:me.email,specialist_name:me.full_name||'',case_summary:report.presentingSituation.summary,main_need:report.supportNeeds.primaryNeed,urgency:data.urgency,problem_categories:report.supportNeeds.secondaryNeeds,interview_notes:notes.map(note=>typeof note==='string'?note:note.final_value||note.finalValue||note.value),external_support_needed:external,selected_organizations:report.referrals.map(item=>({organization_id:item.organization_id||'',name:item.organisation,service:item.service,reason:item.reason})),report_text:reportText,case_report:report,report_history:history,report_version:2,status:'finalised'};
       if(isPrototypeEmployee()){
         await employeePortal('saveFinalReport',{caseId:data.id,payload});
       }else{
