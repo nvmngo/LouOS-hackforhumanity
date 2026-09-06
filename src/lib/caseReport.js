@@ -66,6 +66,8 @@ export function normalizeCaseReport(record={}){
   const contact=text(record.contact||raw.phoneOrContact);
   const categories=list(record.problem_categories||raw.problemCategories).map(item=>supportCategory[item]||item);
   const urgent=text(raw.urgentAttention);
+  const childrenCount=text(raw.childrenCount);
+  const dependants=childrenCount?`${text(raw.childrenDependants)||'Yes'} — ${childrenCount}`:text(raw.childrenDependants||raw.dependants||record.dependants);
   const concerns=[
     ...list(record.safety_concerns),
     ...(categories.includes('Domestic / family violence support')?['Violence / threats']:[]),
@@ -76,7 +78,7 @@ export function normalizeCaseReport(record={}){
   const created=record.created_date||record.createdDate||new Date().toISOString();
   const legacy={
     caseOverview:{caseId,openedDate:text(raw.date||created).slice(0,10),assignedSpecialist:text(record.assigned_specialist_name),status:text(record.status)==='matched'?'Active':text(record.status||'New'),urgency:text(record.urgency),preferredLanguage:text(record.preferred_language||raw.preferredLanguage),preferredContactMethod:text(raw.safeContactPreference)},
-    clientInformation:{fullName:text(record.client_name||raw.fullName),preferredName:text(record.preferred_name||raw.preferredName),age:text(raw.age),pronouns:text(raw.pronouns),phone:contact.includes('@')?'':contact,email:contact.includes('@')?contact:text(raw.email),dependants:text(raw.childrenDependants||raw.dependants||record.dependants),accommodation:text(raw.currentAccommodation||raw.accommodation||record.accommodation),preferredContactMethod:text(raw.safeContactPreference),safeToContact:text(raw.safeToday),contactInstructions:text(raw.safeContactPreference||record.safeContact)},
+    clientInformation:{fullName:text(record.client_name||raw.fullName),preferredName:text(record.preferred_name||raw.preferredName),age:text(raw.age),pronouns:text(raw.pronouns),phone:contact.includes('@')?'':contact,email:contact.includes('@')?contact:text(raw.email),dependants,accommodation:text(raw.currentAccommodation||raw.accommodation||record.accommodation),preferredContactMethod:text(raw.safeContactPreference),safeToContact:text(raw.safeToday),contactInstructions:text(raw.safeContactPreference||record.safeContact)},
     presentingSituation:{summary:text(record.summary||raw.reasonToday),recentChanges:text(raw.recentEvents||raw.stayDuration)},
     safety:{level:safetyLevel(record.urgency,raw.safeToday),concerns,notes:urgent,sources:concerns.length?['Client reported']:[]},
     supportNeeds:{primaryNeed:text(record.main_need||raw.helpToday||record.mainNeed),secondaryNeeds:categories,clientPriority:text(raw.helpToday||record.main_need||record.mainNeed)},

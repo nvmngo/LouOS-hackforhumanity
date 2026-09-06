@@ -1,35 +1,50 @@
-.online-report{width:min(980px,100%);margin:auto;background:#fffdfa;border:1px solid #e4d8cc;border-radius:26px;padding:38px;box-shadow:0 16px 45px #4b321b0b}
-.online-intro{max-width:760px;margin-bottom:32px}
-.online-intro h1{font-size:40px;margin:8px 0 12px}
-.online-intro>p:not(.online-form-title){color:#69615b;line-height:1.6;margin-top:7px}
-.online-intro>p:last-child{font-size:14px}
-.online-section{border-top:2px solid #39332f;padding:28px 0}
-.online-section>header{display:flex;align-items:flex-start;gap:12px;margin-bottom:20px}
-.online-section>header>span{min-width:28px;height:28px;background:#b65331;color:white;display:grid;place-items:center;font-weight:800}
+.online-report{width:min(760px,100%);margin:auto;background:#fffdfa;border:1px solid #e4d8cc;border-radius:26px;padding:44px;box-shadow:0 16px 45px #4b321b0b}
+.online-intro{margin-bottom:34px}
+.online-intro h1{font-size:44px;margin:8px 0 16px}
+.online-intro>p:not(.online-form-title){color:#4f4842;font-size:20px;line-height:1.6;margin-top:8px}
+.online-intro>p strong{font-weight:800;color:#2f2925}
+.online-language{display:block;margin-bottom:30px}
+.online-language>span{display:flex;align-items:center;gap:10px;color:#2f2925;font-size:21px;font-weight:800;margin-bottom:10px}
+.online-language select{width:100%;border:2px solid #bfb0a3;border-radius:11px;background:white;padding:15px 16px;font-size:20px;font-weight:700;color:#2f2925}
+.online-language select:focus-visible{outline:3px solid #b65331;outline-offset:2px;border-color:#b65331}
+.online-section{border-top:3px solid #39332f;padding:32px 0}
+.online-section>header{display:flex;align-items:flex-start;gap:12px;margin-bottom:24px}
+.online-section>header>span{min-width:30px;height:30px;background:#b65331;color:white;display:grid;place-items:center;font-size:17px;font-weight:800}
+.online-children>div{display:grid;gap:14px}
+.online-children label{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:600}
+.online-children-yes{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.online-children-ask{font-size:19px;color:#5d554e}
+.online-children input[type=number]{width:130px}
 .online-section-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.online-section-title>span{border:1px solid #d6c8bc;border-radius:999px;color:#70675f;font-size:12px;font-weight:800;line-height:1;padding:5px 9px;text-transform:uppercase}
-.online-section h2{font-size:23px}
-.online-section header p{color:#756d66;font-style:italic;line-height:1.5;margin-top:5px}
-.online-fields{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.online-section-title>span{border:1px solid #d6c8bc;border-radius:999px;color:#5d554e;font-size:14px;font-weight:800;line-height:1;padding:6px 10px;text-transform:uppercase}
+.online-section h2{font-size:30px;font-weight:800}
+.online-section header p{color:#5d554e;font-size:18px;line-height:1.5;margin-top:7px}
+.online-fields{display:grid;grid-template-columns:1fr;gap:30px}
 .online-field{display:block;min-width:0}
-.online-field>span,.online-field legend{display:block;font-size:14px;font-weight:800;line-height:1.4;margin-bottom:8px;text-transform:uppercase}
-.online-field>span small,.online-field legend small{display:block;color:#756d66;font-size:13px;font-weight:500;margin-top:2px;text-transform:none}
-.online-helper{display:block;color:#6f675f;font-size:14px;font-weight:400;line-height:1.45;margin:-2px 0 9px}
-.online-field input[type=text],.online-field input[type=tel],.online-field input[type=number],.online-field input[type=date],.online-field textarea{width:100%;border:1px solid #cfc2b7;border-radius:11px;background:white;padding:13px 14px;font-size:16px;line-height:1.45}
-.online-field input::placeholder,.online-field textarea::placeholder{color:#968d86;opacity:1}
+.online-field>span,.online-field legend{display:block;color:#2f2925;font-size:21px;font-weight:800;line-height:1.35;margin-bottom:10px}
+.online-field>span small,.online-field legend small{display:block;color:#5d554e;font-size:17px;font-weight:600;margin-top:3px}
+.online-helper{display:block;color:#5d554e;font-size:17px;font-weight:500;line-height:1.45;margin:-3px 0 11px}
+.online-field input[type=text],.online-field input[type=tel],.online-field input[type=number],.online-field input[type=date],.online-field textarea{width:100%;border:2px solid #bfb0a3;border-radius:11px;background:white;padding:15px 16px;font-size:20px;line-height:1.45}
+.online-field input::placeholder,.online-field textarea::placeholder{color:#8d847c;opacity:1}
 .online-field textarea{resize:vertical}
-.online-field:has(textarea),.online-wide{grid-column:1/-1}
-.online-options{display:flex;flex-wrap:wrap;gap:9px}
-.online-options label,.online-checks label{display:flex;align-items:flex-start;gap:9px;border:1px solid #d9ccc0;border-radius:10px;background:white;padding:11px 13px}
-.online-options label>span{display:grid;gap:2px}
-.online-options label b{font-size:14px}
-.online-options label small{color:#756d66;font-size:12px;font-weight:400}
-.online-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.online-field input[type=radio],.online-field input[type=checkbox]{width:19px;height:19px;accent-color:#b65331;flex:0 0 auto}
-.online-other-detail{display:block;margin-top:12px}
-.online-other-detail>span{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
-.online-submit{display:flex;margin:30px auto 0;min-width:260px}
-.online-error{background:#f6dfda;color:#923e31;padding:12px;border-radius:10px;margin-top:18px}
+.online-field :is(input,textarea):focus-visible{outline:3px solid #b65331;outline-offset:2px;border-color:#b65331}
+.online-options,.online-checks{display:grid;grid-template-columns:1fr;gap:12px}
+.online-options label,.online-checks label{display:flex;align-items:center;gap:14px;border:2px solid #cfc0b3;border-radius:12px;background:white;padding:16px 18px;font-size:20px;font-weight:600;cursor:pointer}
+.online-options label:has(:checked),.online-checks label:has(:checked){border-color:#b65331;background:#fdf3ef;font-weight:800}
+.online-options label:has(:focus-visible),.online-checks label:has(:focus-visible){outline:3px solid #b65331;outline-offset:2px}
+.online-field input[type=radio],.online-field input[type=checkbox]{width:26px;height:26px;accent-color:#b65331;flex:0 0 auto}
+.online-required{display:inline-block;margin-left:10px;padding:4px 11px;border-radius:999px;background:#f6e2da;color:#8f3d27;font-size:14px;font-style:normal;font-weight:800;text-transform:uppercase;letter-spacing:.05em;vertical-align:middle}
+.online-required-line{margin-bottom:12px}
+.online-field-error{display:flex;align-items:center;gap:9px;margin:0 0 11px;padding:11px 14px;border-left:5px solid #b03a25;border-radius:8px;background:#fbe9e4;color:#8f2f1c;font-size:18px;font-weight:700;line-height:1.4}
+.online-field[data-error=true] input,.online-field[data-error=true] textarea{border-color:#b03a25}
+.online-to-top{position:fixed;z-index:40;right:26px;bottom:26px;display:inline-flex;align-items:center;gap:10px;padding:15px 24px 15px 20px;border:3px solid #713629;border-radius:999px;background:#fffdfb;color:#713629;font-size:19px;font-weight:800;box-shadow:0 12px 26px #7136292e;opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .25s ease,transform .25s ease,background .2s ease,color .2s ease}
+.online-to-top.is-visible{opacity:1;transform:none;pointer-events:auto}
+.online-to-top:hover{background:#713629;color:#fff}
+.online-to-top:focus-visible{outline:4px solid #713629;outline-offset:3px}
+.online-other-detail{display:block;margin-top:14px}
+.online-other-detail>span{display:block;font-size:19px;font-weight:800;margin-bottom:8px}
+.online-submit{display:flex;margin:34px auto 0;min-width:280px;font-size:20px;font-weight:800;padding:18px 28px}
+.online-error{background:#f6dfda;color:#923e31;font-size:18px;padding:14px;border-radius:10px;margin-top:18px}
 .online-spin{animation:online-spin 1s linear infinite}
 @keyframes online-spin{to{transform:rotate(360deg)}}
-@media(max-width:700px){.online-report{padding:24px 18px}.online-fields,.online-checks{grid-template-columns:1fr}.online-intro h1{font-size:34px}.online-field:has(textarea),.online-wide{grid-column:auto}.online-options{display:grid}.online-submit{width:100%;min-width:0}}
+@media(max-width:700px){.online-report{padding:24px 18px}.online-intro h1{font-size:36px}.online-submit{width:100%;min-width:0}}

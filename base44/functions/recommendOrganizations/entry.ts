@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
-import { secrets } from 'base44:runtime';
+import { optionalSecret } from '../../shared/optionalSecret.ts';
 
 const demoOrganizations = [
   {id:'harbour-womens',name:'Harbour Women’s Support Centre',service_types:['Transitional housing','DFV support','Safety planning'],client_groups:['Women','Women with children'],eligibility:['Experiencing housing instability or family violence'],languages:['English','Vietnamese interpreter','Mandarin interpreter'],locations:['Inner Sydney'],support_levels:['High','Immediate'],availability:'Limited places this week',referral_method:'Warm referral by phone',contact:'02 9000 0101',notes:'Children can stay with their parent.'},
@@ -20,7 +20,9 @@ export default async function(req: Request): Promise<Response> {
     if (!summary) return Response.json({error:'A case summary is required.'}, {status:400});
     const organizations = demoOrganizations;
     const prompt = `Rank up to three suitable support organisations for this client case. Use only IDs from the supplied list. Consider services, eligibility, client group, language, location, urgency, availability and referral method. Do not invent facts. Return JSON: {"recommendations":[{"organization_id":"...","score":0,"reason":"...","service":"..."}]}.\nCase summary: ${summary}\nCategories: ${categories.join(', ')}\nUrgency: ${urgency}\nOrganisations: ${JSON.stringify(organizations)}`;
-    const aiResponse = await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${secrets.get('OPENAI_API_KEY')}`},body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'user',content:prompt}],response_format:{type:'json_object'},temperature:0.1,max_tokens:900})});
+    const apiKey = optionalSecret('OPENAI_API_KEY');
+    if (!apiKey) return Response.json({error:'OPENAI_API_KEY is not set for this app. Add it with: base44 secrets set OPENAI_API_KEY=your-key'},{status:503});
+    const aiResponse = await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${apiKey}`},body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'user',content:prompt}],response_format:{type:'json_object'},temperature:0.1,max_tokens:900})});
     const result = await aiResponse.json();
     if (!aiResponse.ok) return Response.json({error:result?.error?.message||'Recommendations could not be prepared.'},{status:502});
     const parsed = JSON.parse(result?.choices?.[0]?.message?.content||'{}');

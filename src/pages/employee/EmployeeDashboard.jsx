@@ -1,6 +1,7 @@
 import React,{useEffect,useState} from 'react';
 import {BriefcaseBusiness} from 'lucide-react';
 import {base44} from '@/api/base44Client';
+import ReturnButton from '@/components/portal/ReturnButton';
 import {normalizeEmployeeCase} from '@/hooks/useEmployeeCase';
 import CaseCard from '@/components/employee/CaseCard';
 export default function EmployeeDashboard(){
@@ -56,5 +57,5 @@ export default function EmployeeDashboard(){
     load();
     return()=>{active=false;unsubscribers.forEach(unsubscribe=>unsubscribe());};
   },[]);
-  return <main className="mvp-main employee-dashboard"><header><div><p className="mvp-kicker">Dashboard</p><h1>Upcoming cases</h1><p>{user?.full_name||'Specialist'} · unresolved</p></div><div className="employee-workload">{specialist&&<span className={`employee-congestion ${specialist.congestion_level||'low'}`}>{specialist.upcoming_case_count||0} upcoming · {(specialist.congestion_level||'low').replace('_',' ')}</span>}<span className="employee-count"><BriefcaseBusiness size={18}/>{cases.length}</span></div></header>{loading?<div className="employee-empty">Loading…</div>:error?<div className="employee-empty">{error}</div>:cases.length?<section className="employee-case-grid">{cases.map(item=><CaseCard key={item.id} item={item}/>)}</section>:<div className="employee-empty">No upcoming cases assigned.</div>}</main>;
+  return <main className="mvp-main employee-dashboard"><ReturnButton variant="inline" to="/" label="Back to home"/><header><div><p className="mvp-kicker">Dashboard</p><h1>Upcoming cases</h1><p>{user?.full_name||'Specialist'} · unresolved</p></div><div className="employee-workload">{specialist&&<span className={`employee-congestion ${specialist.congestion_level||'low'}`}>{specialist.upcoming_case_count||0} upcoming · {(specialist.congestion_level||'low').replace('_',' ')}</span>}<span className="employee-count"><BriefcaseBusiness size={18}/>{cases.length}</span></div></header>{loading?<div className="employee-empty">Loading…</div>:error?<div className="employee-empty">{error}</div>:cases.length?<section className="employee-case-grid">{cases.map(item=><CaseCard key={item.id} item={item}/>)}</section>:<div className="employee-empty">No upcoming cases assigned.</div>}</main>;
 }

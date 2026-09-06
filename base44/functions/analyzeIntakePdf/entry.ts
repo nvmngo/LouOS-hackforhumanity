@@ -1,4 +1,4 @@
-import { secrets } from 'base44:runtime';
+import { optionalSecret } from '../../shared/optionalSecret.ts';
 
 const allowedFileHosts = [
   'base44.com',
@@ -76,9 +76,11 @@ Return JSON with exactly these keys: client_name, preferred_name, age, preferred
 Map "Full name" to client_name and "What is the most important support you need first?" to main_need. problems must be an array of objects with category, priority, description. Use the printed relevant-area label as category where possible. Preserve "Immediate" urgency when visible; otherwise priority must be High, Medium, or Low. Put form details that have no dedicated JSON key into key_information as short factual strings prefixed by their printed label, including Date, Case status, Urgency, accommodation duration, safe today response, why the client came, recent events, urgent attention, important information, caseworker name, role, and specialisation.
 
 summary must be a concise 3–6 sentence case description covering why the client came, current accommodation and safety, dependants, major problems, urgent concerns, immediate priority, and requested support. Extract only information actually visible in handwriting or marked choices. Never guess, infer, complete blank fields, or treat printed form text as a client response. If handwriting or a mark is unclear, use an empty string or omit that fact from key_information; use empty arrays when no items are readable.`;
+    const apiKey = optionalSecret('OPENAI_API_KEY');
+    if (!apiKey) return Response.json({ error: 'OPENAI_API_KEY is not set for this app. Add it with: base44 secrets set OPENAI_API_KEY=your-key' }, { status: 503 });
     const openAiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${secrets.get('OPENAI_API_KEY')}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({
         model: 'gpt-4o-mini',
         messages: [{ role: 'user', content: [

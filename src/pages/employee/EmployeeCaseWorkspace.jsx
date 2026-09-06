@@ -1,6 +1,7 @@
 import React,{useMemo,useState} from 'react';
 import {Link,useParams} from 'react-router-dom';
-import {ArrowLeft,ArrowRight} from 'lucide-react';
+import {ArrowRight} from 'lucide-react';
+import ReturnButton from '@/components/portal/ReturnButton';
 import useEmployeeCase from '@/hooks/useEmployeeCase';
 import EmployeeCaseReport from '@/components/employee/EmployeeCaseReport';
 import EmployeeNoteTaker from '@/components/employee/EmployeeNoteTaker';
@@ -24,5 +25,5 @@ export default function EmployeeCaseWorkspace(){
   };
   if(loading)return <main className="sr-page"><div className="sr-wrap">Loading…</div></main>;
   if(error)return <main className="sr-page"><div className="sr-wrap">{error}</div></main>;
-  return <main className="sr-page"><div className="sr-wrap"><Link className="employee-icon-back" to="/staff" aria-label="Dashboard"><ArrowLeft/></Link><header className="sr-heading"><div><p>Living case report · Consultation workspace</p><h1>{data.clientName}</h1><p>{data.caseId} · Intake information is shown until specialist updates are approved</p></div><span className={`employee-urgency ${data.urgency}`}>{data.urgency}</span></header><div className="sr-layout"><EmployeeCaseReport caseData={workingCase}/><EmployeeNoteTaker caseData={workingCase} onReview={reviewSuggestion}/></div><footer className="sr-footer"><Link to={`/staff/cases/${caseId}/decision`}>Complete consultation <ArrowRight size={16}/></Link></footer></div></main>;
+  return <main className="sr-page"><div className="sr-wrap"><ReturnButton variant="inline" to="/staff" label="Back to the dashboard"/><header className="sr-heading"><div><p>Living case report · Consultation workspace</p><h1>{data.clientName}</h1><p>{data.caseId} · Intake information is shown until specialist updates are approved</p></div><span className={`employee-urgency ${data.urgency}`}>{data.urgency}</span></header><div className="sr-layout"><EmployeeCaseReport caseData={workingCase}/><EmployeeNoteTaker caseData={workingCase} onReview={reviewSuggestion}/></div><footer className="sr-footer"><Link to={`/staff/cases/${caseId}/decision`}>Complete consultation <ArrowRight size={16}/></Link></footer></div></main>;
 }

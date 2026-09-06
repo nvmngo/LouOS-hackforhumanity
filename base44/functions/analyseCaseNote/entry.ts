@@ -1,6 +1,6 @@
 import OpenAI from 'npm:openai';
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
-import { secrets } from 'base44:runtime';
+import { optionalSecret } from '../../shared/optionalSecret.ts';
 import { allowedFieldPaths, analysisRequestSchema, arrayFieldPaths, getReportValue, labelForField, modelOutputSchema, safetyLevels, sectionLabels } from '../../shared/caseNoteSuggestions.ts';
 
 const outputJsonSchema = {
@@ -25,7 +25,6 @@ Safety information remains a proposed update requiring specialist approval; neve
 For safety.level, use exactly one of: No immediate concern, Concern identified, Immediate concern, Not assessed / unknown.
 Return only structured proposed changes. The official report is controlled by the specialist and is not changed until a specialist approves a suggestion.`;
 
-const optionalSecret = (name: string) => { try { return secrets.get(name) || ''; } catch { return ''; } };
 const cleanText = (value: unknown, limit=2000) => typeof value === 'string' ? value.trim().slice(0,limit) : '';
 const comparable = (value: unknown) => (Array.isArray(value) ? value.join(' ') : String(value || '')).trim().toLowerCase();
 
