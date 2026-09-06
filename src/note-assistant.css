@@ -14,3 +14,14 @@
 .sr-spin { animation: sr-spin .8s linear infinite; }
 
 @keyframes sr-spin { to { transform: rotate(360deg); } }
+
+.sr-note-hint { margin: 6px 0 10px; color: #8a7f77; font-size: 11px; }
+
+.sr-queue { margin: 14px 0 4px; display: grid; gap: 6px; }
+.sr-queue-item { display: flex; align-items: center; gap: 7px; margin: 0; padding: 8px 10px; border-radius: 8px; background: #f4eee8; color: #6b615a; font-size: 12px; font-weight: 700; }
+.sr-queue-item.analysing { color: #a2542c; }
+
+.sr-queue-failed { margin: 12px 0; padding: 10px; border: 1px solid #e6d9cf; border-radius: 10px; }
+.sr-queue-failed blockquote { margin: 8px 0; padding: 8px 10px; border-radius: 8px; background: #f7f2ed; color: #5f554e; font-size: 12px; white-space: pre-wrap; }
+.sr-queue-failed button { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border: 1px solid #d9cabd; border-radius: 999px; background: #fff; color: #5f554e; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
+.sr-queue-failed button:hover { background: #f7f2ed; }

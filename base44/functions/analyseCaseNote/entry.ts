@@ -24,6 +24,7 @@ Do not invent missing details or convert uncertainty into certainty. Do not infe
 Compare each fact with the current report. Omit unchanged duplicates. Treat contradictions or changed information as updates and preserve uncertainty. For list fields, add only unique information rather than replacing the list.
 Safety information remains a proposed update requiring specialist approval; never label immediate danger unless the note clearly states an immediate concern. Discussion does not imply agreement or consent.
 For safety.level, use exactly one of: No immediate concern, Concern identified, Immediate concern, Not assessed / unknown.
+Write every value as a plain statement of fact in the report's own voice, as a reader of the case report would need it. Never attribute a fact to the note or to whoever wrote it: do not write "specialist note states", "the note says", "as recorded in the specialist note", "the specialist reports", or any similar wording. Record where a fact came from in sourceType, which is metadata, and never inside value.
 Return only structured proposed changes. The official report is controlled by the specialist and is not changed until a specialist approves a suggestion.`;
 
 const cleanText = (value: unknown, limit=2000) => typeof value === 'string' ? value.trim().slice(0,limit) : '';
