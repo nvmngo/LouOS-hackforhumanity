@@ -1,0 +1,33 @@
+.employee-assignment-alert {
+  border: 1px solid #e3cbbd;
+  border-radius: 24px;
+  background: #fffdfa;
+  padding: 30px;
+}
+
+.employee-alert-icon {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #f3ddd2;
+  color: #a64d30;
+}
+
+.employee-alert-icon svg { width: 25px; }
+.employee-assignment-alert [role="heading"] { margin-top: 8px; color: #302823; font: 700 28px 'Fraunces'; }
+.employee-alert-case { margin: 8px 0; padding: 19px; border: 1px solid #eadbd0; border-radius: 16px; background: #fff8f3; }
+.employee-alert-case h3 { margin: 12px 0 4px; font-size: 22px; }
+.employee-alert-case p { margin-bottom: 15px; color: #665d57; line-height: 1.45; }
+.employee-alert-case small { display: flex; align-items: center; gap: 7px; color: #7b6c63; font-weight: 700; }
+.employee-assignment-alert > button { top: 20px; right: 20px; }
+.employee-workload { display: flex; align-items: center; gap: 10px; }
+.employee-congestion { border-radius: 99px; padding: 10px 13px; background: #e4ece1; color: #4e6349; font-size: 11px; font-weight: 800; text-transform: capitalize; }
+.employee-congestion.moderate { background: #f0e3c9; color: #765b25; }
+.employee-congestion.high,
+.employee-congestion.at_capacity { background: #f2d6ce; color: #993e2d; }
+
+@media (max-width: 620px) {
+  .employee-workload { align-items: flex-end; flex-direction: column-reverse; }
+}

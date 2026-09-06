@@ -1,0 +1,16 @@
+.sr-suggestion-count {
+  margin: 16px 0 8px;
+  color: #5f554e;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.sr-suggestion h3 { margin: 10px 0 5px; font-size: 15px; }
+.sr-previous-value { margin: 7px 0; padding: 8px; border-radius: 8px; background: #f4eee8; color: #756b64; font-size: 11px; }
+.sr-previous-value span { display: block; margin-bottom: 3px; font-size: 8px; font-weight: 850; text-transform: uppercase; }
+.sr-suggestion-actions { grid-template-columns: repeat(3, 1fr); }
+.sr-suggestion-actions button:disabled { cursor: not-allowed; opacity: .55; }
+.sr-suggestion-edit + .sr-suggestion-actions { grid-template-columns: 2fr 1fr; }
+.sr-spin { animation: sr-spin .8s linear infinite; }
+
+@keyframes sr-spin { to { transform: rotate(360deg); } }

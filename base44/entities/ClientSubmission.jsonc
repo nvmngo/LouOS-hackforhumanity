@@ -45,6 +45,21 @@
     "raw_answers": {
       "type": "object"
     },
+    "case_report": {
+      "type": "object",
+      "description": "The canonical structured Living Case Report. Intake, consultation, support planning, follow-up and closure update this same object."
+    },
+    "report_history": {
+      "type": "array",
+      "description": "Approved field-level report changes and provenance.",
+      "items": {
+        "type": "object"
+      }
+    },
+    "report_version": {
+      "type": "integer",
+      "default": 1
+    },
     "status": {
       "type": "string",
       "enum": [
@@ -62,6 +77,28 @@
     },
     "match_score": {
       "type": "number"
+    },
+    "reviewed_note_suggestions": {
+      "type": "array",
+      "description": "Specialist-reviewed AI suggestions. Only approved or edited-and-approved entries are applied to the official working report.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "field_path": { "type": "string" },
+          "section": { "type": "string" },
+          "label": { "type": "string" },
+          "operation": { "type": "string", "enum": ["add", "update"] },
+          "source_type": { "type": "string", "enum": ["client_reported", "specialist_observed", "specialist_note", "unknown"] },
+          "reason": { "type": "string" },
+          "evidence": { "type": "string" },
+          "original_suggestion": { "type": "string" },
+          "final_value": { "type": "string" },
+          "status": { "type": "string", "enum": ["approved", "edited_and_approved", "rejected"] },
+          "reviewed_by": { "type": "string" },
+          "reviewed_at": { "type": "string", "format": "date-time" }
+        }
+      }
     }
   },
   "required": [

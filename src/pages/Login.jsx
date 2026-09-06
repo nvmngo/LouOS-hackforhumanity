@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import { safeReturnTo } from "@/lib/authReturnTo";
-import {DEMO_EMPLOYEE,startDemoEmployeeSession} from "@/lib/demoEmployee";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -23,11 +22,6 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      if(email===DEMO_EMPLOYEE.email&&password===DEMO_EMPLOYEE.password){
-        startDemoEmployeeSession();
-        window.location.href=returnTo;
-        return;
-      }
       await base44.auth.loginViaEmailPassword(email, password);
       window.location.href = returnTo;
     } catch (err) {
@@ -100,12 +94,6 @@ export default function Login() {
           )}
         </Button>
       </form>
-      <div className="mt-5 rounded-xl border bg-muted/40 p-4 text-sm">
-        <p className="font-semibold">Demo specialist</p>
-        <p className="mt-2"><b>Email:</b> {DEMO_EMPLOYEE.email}</p>
-        <p><b>Password:</b> {DEMO_EMPLOYEE.password}</p>
-        <Button type="button" variant="outline" className="mt-3 w-full" onClick={()=>{setEmail(DEMO_EMPLOYEE.email);setPassword(DEMO_EMPLOYEE.password)}}>Use demo login</Button>
-      </div>
     </AuthLayout>
   );
 }
