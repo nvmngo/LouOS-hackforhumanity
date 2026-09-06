@@ -123,3 +123,22 @@ export function suggestionHistory(suggestions=[],specialist=''){
 }
 
 export const displayValue=value=>text(value)||'Not provided';
+const compact=value=>Array.isArray(value)?value.filter(Boolean).join(' · ')||'Not provided':displayValue(value);
+
+// The A–M section list shared by the final report page, the resolved case
+// archive and the PDF export, so every surface renders the same report.
+export const caseReportSections=report=>[
+  ['A. Case Overview',`${compact(report.caseOverview.status)} · ${compact(report.caseOverview.urgency)} · ${compact(report.caseOverview.assignedSpecialist)}`],
+  ['B. Client Information',`${compact(report.clientInformation.fullName)} · ${compact(report.clientInformation.dependants)} · ${compact(report.clientInformation.accommodation)}`],
+  ['C. Presenting Situation',compact(report.presentingSituation.summary)],
+  ['D. Safety & Immediate Concerns',`${compact(report.safety.level)} · ${compact(report.safety.concerns)}`],
+  ['E. Identified Support Needs',`${compact(report.supportNeeds.primaryNeed)} · ${compact(report.supportNeeds.secondaryNeeds)}`],
+  ['F. Relevant Background',compact(Object.values(report.background).filter(Boolean))],
+  ['G. Client Goals & Preferences',compact(report.clientGoals.immediateGoal)],
+  ['H. Consultation Summary',compact([...report.consultation.clientReported,...report.consultation.discussion,...report.consultation.outcome])],
+  ['I. Support Plan / Agreed Solution',compact(report.supportPlan.agreedSolution||'To be discussed')],
+  ['J. Actions & Responsibilities',report.actions.length?report.actions.map(item=>`${item.description} — ${item.status}`).join(' · '):'No actions recorded'],
+  ['K. Referrals & External Services',report.referrals.length?report.referrals.map(item=>`${item.organisation} — ${item.status}`).join(' · '):'No referrals recorded'],
+  ['L. Follow-Up Plan',compact(report.followUp.purpose||report.followUp.nextContactDate)],
+  ['M. Case Outcome / Closure',report.caseOverview.status==='Closed'?compact(report.closure.outcomeAchieved):'Not applicable while the case is active']
+];

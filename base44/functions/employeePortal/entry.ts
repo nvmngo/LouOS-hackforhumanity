@@ -38,6 +38,20 @@ export default async function(req: Request): Promise<Response> {
       return Response.json({employee: publicEmployee, specialist: employee.specialist, cases: submissions.filter((item: any) => !completed.has(item.id))});
     }
 
+    if (action === 'listResolvedCases') {
+      const reports = await entities.EmployeeCaseReport.filter({specialist_email: employee.email}, '-created_date', 100);
+      return Response.json({employee: publicEmployee, specialist: employee.specialist, cases: reports});
+    }
+
+    if (action === 'getResolvedCase') {
+      const reportId = clean(body?.reportId, 100);
+      const report = reportId ? await entities.EmployeeCaseReport.get(reportId) : null;
+      if (!report || report.specialist_email !== employee.email) {
+        return Response.json({error: 'This resolved case was not finalised by you.'}, {status: 403});
+      }
+      return Response.json({case: report});
+    }
+
     if (action === 'getCase') {
       const caseId = clean(body?.caseId, 100);
       const submission = caseId ? await entities.ClientSubmission.get(caseId) : null;

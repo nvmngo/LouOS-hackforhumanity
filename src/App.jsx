@@ -43,6 +43,8 @@ import EmployeeCaseWorkspace from '@/pages/employee/EmployeeCaseWorkspace';
 import EmployeeDecision from '@/pages/employee/EmployeeDecision';
 import EmployeeReferrals from '@/pages/employee/EmployeeReferrals';
 import EmployeeFinalReport from '@/pages/employee/EmployeeFinalReport';
+import EmployeeResolvedCases from '@/pages/employee/EmployeeResolvedCases';
+import EmployeeResolvedCase from '@/pages/employee/EmployeeResolvedCase';
 import RoleSelection from '@/pages/RoleSelection';
 // Add page imports here
 
@@ -77,6 +79,8 @@ const AuthenticatedApp = () => {
         <Route element={<EmployeeAccessRoute/>}>
           <Route element={<MVPShell />}>
             <Route path="/employee" element={<EmployeeDashboard />} />
+            <Route path="/employee/resolved" element={<EmployeeResolvedCases />} />
+            <Route path="/employee/resolved/:reportId" element={<EmployeeResolvedCase />} />
             <Route path="/employee/cases/:caseId" element={<AssignedCaseAccessRoute/>}>
               <Route index element={<EmployeeCaseWorkspace />} />
               <Route path="decision" element={<EmployeeDecision />} />
