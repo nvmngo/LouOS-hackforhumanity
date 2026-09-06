@@ -25,7 +25,7 @@ export default function OnlineReportForm({onSubmitted,cancelPath}){
   };
   const renderSection=section=><OnlineReportSection key={section.title} section={section} values={values} onChange={update}/>;
   return <form className="online-report" onSubmit={submit}>
-    <header className="online-intro"><p className="online-form-title">WELCOME FORM</p><h1>Lou’s Place</h1><p><strong>Answer as much or as little as you feel comfortable sharing.</strong> You can leave any question blank. A Lou’s Place staff member can help you complete this form.</p><p>If you are unsure about a question, you can leave it blank and discuss it with a staff member.</p></header>
+    <header className="online-intro"><h1>Lou’s Place</h1><p className="online-form-title">WELCOME FORM</p><p><strong>Take your time, and leave blank anything you’d rather not answer.</strong> Someone on our team is happy to help you fill this in.</p></header>
     <div className="online-form-vertical">{onlineReportSections.map(renderSection)}</div>
     {error&&<p className="online-error" role="alert">{error}</p>}
     <div className="online-actions">

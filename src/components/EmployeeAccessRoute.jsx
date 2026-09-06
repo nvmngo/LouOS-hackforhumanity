@@ -2,6 +2,7 @@ import {useEffect,useState} from 'react';
 import {Outlet} from 'react-router-dom';
 import {base44} from '@/api/base44Client';
 import {useAuth} from '@/lib/AuthContext';
+import {employeePortal,isPrototypeEmployee} from '@/lib/employeeSession';
 
 export default function EmployeeAccessRoute(){
   const{user,logout}=useAuth();
@@ -11,9 +12,14 @@ export default function EmployeeAccessRoute(){
     let active=true;
     const verify=async()=>{
       try{
-        const employee=user||await base44.auth.me();
-        const specialists=await base44.entities.Specialist.filter({contact_email:employee.email,active:true});
-        if(active)setStatus(specialists[0]?'allowed':'denied');
+        if(isPrototypeEmployee()){
+          await employeePortal('session');
+          if(active)setStatus('allowed');
+        }else{
+          const employee=user||await base44.auth.me();
+          const specialists=await base44.entities.Specialist.filter({contact_email:employee.email,active:true});
+          if(active)setStatus(specialists[0]?'allowed':'denied');
+        }
       }catch{
         if(active)setStatus('denied');
       }

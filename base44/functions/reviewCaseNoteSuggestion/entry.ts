@@ -1,20 +1,26 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 import { arrayFieldPaths, reviewRequestSchema, safetyLevels } from '../../shared/caseNoteSuggestions.ts';
+import { getPrototypeEmployee } from '../../shared/prototypeEmployeeAuth.ts';
 
 export default async function(req: Request): Promise<Response> {
   if (req.method !== 'POST') return Response.json({error:'Method not allowed.'},{status:405,headers:{Allow:'POST'}});
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) return Response.json({error:'Unauthorized.'},{status:401});
-    const parsed = reviewRequestSchema.safeParse(await req.json().catch(()=>null));
+    const body = await req.json().catch(()=>null);
+    let user=null;
+    try{user=await base44.auth.me();}catch{/* Prototype authentication is checked below. */}
+    const entities = base44.asServiceRole.entities;
+    const prototypeEmployee = user ? null : await getPrototypeEmployee(body, entities);
+    if (!user && !prototypeEmployee) return Response.json({error:'Unauthorized.'},{status:401});
+    const reviewer = user?.email || prototypeEmployee?.email;
+    const {employeeToken: _employeeToken, ...reviewBody} = body && typeof body === 'object' ? body : {};
+    const parsed = reviewRequestSchema.safeParse(reviewBody);
     if (!parsed.success) return Response.json({error:'This suggestion could not be reviewed safely.'},{status:400});
     const {caseId,decision,suggestion} = parsed.data;
     if (suggestion.fieldPath==='safety.level'&&!safetyLevels.has(suggestion.finalValue)) return Response.json({error:'Choose a supported safety level before approving this update.'},{status:400});
-    const entities = base44.asServiceRole.entities;
     const [submission,specialists] = await Promise.all([
       entities.ClientSubmission.get(caseId),
-      entities.Specialist.filter({contact_email:user.email,active:true})
+      entities.Specialist.filter({contact_email:reviewer,active:true})
     ]);
     if (!submission || !specialists.some((specialist: {id:string})=>specialist.id===submission.assigned_specialist_id)) return Response.json({error:'You are not assigned to this case.'},{status:403});
 
@@ -31,7 +37,7 @@ export default async function(req: Request): Promise<Response> {
       original_suggestion:suggestion.originalValue,
       final_value:suggestion.finalValue,
       status:decision==='rejected'?'rejected':edited?'edited_and_approved':'approved',
-      reviewed_by:user.email,
+      reviewed_by:reviewer,
       reviewed_at:new Date().toISOString()
     };
     const history = Array.isArray(submission.reviewed_note_suggestions) ? submission.reviewed_note_suggestions : [];
@@ -57,7 +63,7 @@ export default async function(req: Request): Promise<Response> {
       update.report_version = (Number(submission.report_version) || 1) + 1;
       update.report_history = [...reportHistory,{
         field_path:suggestion.fieldPath,previous_value:previousValue,new_value:suggestion.finalValue,
-        source:'Consultation AI extraction',updated_at:review.reviewed_at,approved_by:user.email,
+        source:'Consultation AI extraction',updated_at:review.reviewed_at,approved_by:reviewer,
         suggestion_status:review.status
       }];
     }

@@ -1,5 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 import { secrets } from 'base44:runtime';
+import { getPrototypeEmployee } from '../../shared/prototypeEmployeeAuth.ts';
 
 const demoOrganizations = [
   {id:'harbour-womens',name:'Harbour Women’s Support Centre',service_types:['Transitional housing','DFV support','Safety planning'],client_groups:['Women','Women with children'],eligibility:['Experiencing housing instability or family violence'],languages:['English','Vietnamese interpreter','Mandarin interpreter'],locations:['Inner Sydney'],support_levels:['High','Immediate'],availability:'Limited places this week',referral_method:'Warm referral by phone',contact:'02 9000 0101',notes:'Children can stay with their parent.'},
@@ -11,9 +12,15 @@ const demoOrganizations = [
 export default async function(req: Request): Promise<Response> {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) return Response.json({error:'Unauthorized'}, {status:401});
     const body = await req.json();
+    let user=null;
+    try{user=await base44.auth.me();}catch{/* Prototype authentication is checked below. */}
+    const prototypeEmployee = user ? null : await getPrototypeEmployee(body, base44.asServiceRole.entities);
+    if (!user && !prototypeEmployee) return Response.json({error:'Unauthorized'}, {status:401});
+    if (prototypeEmployee) {
+      const submission = await base44.asServiceRole.entities.ClientSubmission.get(body?.caseId);
+      if (!submission || submission.assigned_specialist_id !== prototypeEmployee.specialist.id) return Response.json({error:'You are not assigned to this case.'}, {status:403});
+    }
     const summary = typeof body?.summary === 'string' ? body.summary.trim().slice(0,6000) : '';
     const categories = Array.isArray(body?.categories) ? body.categories.filter((x: unknown)=>typeof x==='string').slice(0,12) : [];
     const urgency = typeof body?.urgency === 'string' ? body.urgency.slice(0,40) : '';

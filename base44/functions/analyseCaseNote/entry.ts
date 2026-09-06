@@ -2,6 +2,7 @@ import OpenAI from 'npm:openai';
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 import { secrets } from 'base44:runtime';
 import { allowedFieldPaths, analysisRequestSchema, arrayFieldPaths, getReportValue, labelForField, modelOutputSchema, safetyLevels, sectionLabels } from '../../shared/caseNoteSuggestions.ts';
+import { getPrototypeEmployee } from '../../shared/prototypeEmployeeAuth.ts';
 
 const outputJsonSchema = {
   type:'object',
@@ -33,14 +34,19 @@ export default async function(req: Request): Promise<Response> {
   if (req.method !== 'POST') return Response.json({error:'Method not allowed.'},{status:405,headers:{Allow:'POST'}});
   try {
     const base44 = createClientFromRequest(req);
-    const parsedRequest = analysisRequestSchema.safeParse(await req.json().catch(()=>null));
+    const requestBody = await req.json().catch(()=>null);
+    const {employeeToken: _employeeToken, ...analysisBody} = requestBody && typeof requestBody === 'object' ? requestBody : {};
+    const parsedRequest = analysisRequestSchema.safeParse(analysisBody);
     if (!parsedRequest.success) return Response.json({error:'A valid case, current report, and note of up to 6,000 characters are required.'},{status:400});
     const {caseId,note,currentReport} = parsedRequest.data;
     let user=null;
     try{user=await base44.auth.me();}catch{/* Handled below without exposing auth details. */}
-    // The single fictional hackathon case remains usable with the repository's local demo login.
-    if (!user && caseId!=='demo-sarah') return Response.json({error:'Unauthorized.'},{status:401});
-    if (!user && cleanText((currentReport.clientInformation as Record<string,unknown> | undefined)?.fullName,100)!=='Sarah Nguyen') return Response.json({error:'Unauthorized.'},{status:401});
+    const prototypeEmployee = user ? null : await getPrototypeEmployee(requestBody, base44.asServiceRole.entities);
+    if (!user && !prototypeEmployee) return Response.json({error:'Unauthorized.'},{status:401});
+    if (prototypeEmployee) {
+      const submission = await base44.asServiceRole.entities.ClientSubmission.get(caseId);
+      if (!submission || submission.status !== 'matched' || submission.assigned_specialist_id !== prototypeEmployee.specialist.id) return Response.json({error:'You are not assigned to this case.'},{status:403});
+    }
 
     const currentFields = Object.fromEntries(allowedFieldPaths.map(fieldPath=>{
       const value = getReportValue(currentReport,fieldPath);

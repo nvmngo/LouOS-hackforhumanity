@@ -21,6 +21,17 @@
     "preferred_language": {
       "type": "string"
     },
+    "signature": {
+      "type": "string",
+      "description": "Typed signature supplied through the online Welcome Form. Paper forms retain only signature presence and the original uploaded image."
+    },
+    "signature_present": {
+      "type": "boolean"
+    },
+    "form_date": {
+      "type": "string",
+      "format": "date"
+    },
     "main_need": {
       "type": "string"
     },

@@ -32,8 +32,39 @@
     "dependants": {
       "type": "string"
     },
+    "has_children": {
+      "type": "string"
+    },
+    "children_count": {
+      "type": "string"
+    },
     "accommodation": {
       "type": "string"
+    },
+    "stay_duration": {
+      "type": "string"
+    },
+    "support_areas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "support_other": {
+      "type": "string"
+    },
+    "reason_today": {
+      "type": "string"
+    },
+    "other_help": {
+      "type": "string"
+    },
+    "signature_present": {
+      "type": "boolean"
+    },
+    "form_date": {
+      "type": "string",
+      "format": "date"
     },
     "main_need": {
       "type": "string"
@@ -60,6 +91,9 @@
       "items": {
         "type": "string"
       }
+    },
+    "raw_answers": {
+      "type": "object"
     },
     "status": {
       "type": "string",

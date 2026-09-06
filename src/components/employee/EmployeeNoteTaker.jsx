@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import {Check,LoaderCircle,Pencil,Sparkles,X} from 'lucide-react';
 import {base44} from '@/api/base44Client';
 import '@/note-assistant.css';
+import {employeeToken} from '@/lib/employeeSession';
 
 const sourceLabel={client_reported:'Client reported',specialist_observed:'Specialist observed',specialist_note:'Specialist note',unknown:'Source not specified'};
 
@@ -18,7 +19,7 @@ export default function EmployeeNoteTaker({caseData,onReview}){
     if(!input.trim()||busy||items.length)return;
     setBusy(true);setError('');
     try{
-      const response=await base44.functions.invoke('analyseCaseNote',{caseId:caseData.id,note:input.trim(),currentReport:caseData.report});
+      const response=await base44.functions.invoke('analyseCaseNote',{caseId:caseData.id,note:input.trim(),currentReport:caseData.report,employeeToken:employeeToken()});
       setItems((response.data.suggestedUpdates||[]).map(item=>({...item,editing:false,finalValue:item.value})));
       setUnmapped(response.data.unmappedInformation||[]);
       setAnalysisComplete(true);
