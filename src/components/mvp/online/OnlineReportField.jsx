@@ -15,14 +15,6 @@ export default function OnlineReportField({field,value,values,error,onChange}){
 
   if(field.type==='textarea')return <label {...wrapper}><span>{fieldLabel}</span>{field.helper&&<small className="online-helper" id={helperId}>{field.helper}</small>}{message}<textarea value={value||''} onChange={e=>onChange(field.id,e.target.value)} rows={field.rows||3} placeholder={field.placeholder} aria-describedby={describedBy} aria-invalid={error?true:undefined}/></label>;
 
-  if(field.type==='children'){
-    const yes=value==='Yes';
-    return <fieldset {...wrapper} className={`${wrapper.className} online-children`}><legend>{fieldLabel}</legend>{message}<div>
-      <label><input type="radio" name={field.id} checked={value==='No'} onChange={()=>{onChange(field.id,'No');onChange(field.countId,'');}}/><span>{field.no}</span></label>
-      <div className="online-children-yes"><label><input type="radio" name={field.id} checked={yes} onChange={()=>onChange(field.id,'Yes')}/><span>{field.yes}</span></label><span className="online-children-ask">{field.ask}</span><input type="number" min="0" disabled={!yes} value={values?.[field.countId]||''} onChange={e=>onChange(field.countId,e.target.value)} aria-label={field.ask}/></div>
-    </div></fieldset>;
-  }
-
   if(field.type==='radio')return <fieldset {...wrapper} aria-describedby={describedBy}><legend>{fieldLabel}</legend>{field.helper&&<p className="online-helper" id={helperId}>{field.helper}</p>}{message}<div className="online-options">{options.map(option=><label key={optionValue(option)}><input type="radio" name={field.id} checked={value===optionValue(option)} onChange={()=>onChange(field.id,optionValue(option))}/><span>{optionLabel(option)}</span></label>)}</div></fieldset>;
 
   if(field.type==='children')return <fieldset {...wrapper} className={`${wrapper.className} online-children`}><legend>{fieldLabel}</legend>{message}<div>{options.map(option=><label key={optionValue(option)}><input type="radio" name={field.id} checked={value===optionValue(option)} onChange={()=>{onChange(field.id,optionValue(option));if(optionValue(option)==='No')onChange(field.countId,'');}}/><span>{optionLabel(option)}</span></label>)}<label className="online-children-yes"><span>— {field.countLabel}</span><input type="number" inputMode="numeric" min="0" aria-label={field.countLabel} value={values?.[field.countId]||''} disabled={value!=='Yes'} onChange={e=>onChange(field.countId,e.target.value)}/></label></div></fieldset>;
