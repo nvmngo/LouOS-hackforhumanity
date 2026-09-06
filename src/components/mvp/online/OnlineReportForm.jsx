@@ -47,7 +47,7 @@ export default function OnlineReportForm({onSubmitted,cancelPath}){
       const response=await base44.functions.invoke('chatCaseAssistant',{operation:'online_report',input:JSON.stringify(answers)});
       const caseId=`LP-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`;
       sessionStorage.setItem('louosOnlineReport',JSON.stringify({caseId,answers,draft:response.data.result.draft}));
-      navigate('/summary');
+      navigate('/employee/summary');
     }catch(err){setError(err?.response?.data?.error||err.message||'The report could not be prepared. Please try again.');setBusy(false);}
   };
   return <form className="online-report" onSubmit={submit} noValidate lang={language} dir={direction}>

@@ -4,6 +4,7 @@ import {base44} from '@/api/base44Client';
 import ReturnButton from '@/components/portal/ReturnButton';
 import {normalizeEmployeeCase} from '@/hooks/useEmployeeCase';
 import CaseCard from '@/components/employee/CaseCard';
+import {employeePortal,isPrototypeEmployee} from '@/lib/employeeSession';
 export default function EmployeeDashboard(){
   const[user,setUser]=useState(null);
   const[specialist,setSpecialist]=useState(null);
@@ -15,6 +16,21 @@ export default function EmployeeDashboard(){
     const unsubscribers=[];
     const load=async()=>{
       try{
+        if(isPrototypeEmployee()){
+          const refresh=async()=>{
+            const response=await employeePortal('listCases');
+            if(!active)return;
+            setUser(response.data.employee);
+            setSpecialist(response.data.specialist);
+            setCases((response.data.cases||[]).map(normalizeEmployeeCase));
+            setError('');
+            setLoading(false);
+          };
+          await refresh();
+          const poll=window.setInterval(()=>refresh().catch(()=>{}),5000);
+          unsubscribers.push(()=>window.clearInterval(poll));
+          return;
+        }
         const me=await base44.auth.me();
         setUser(me);
         const specialists=await base44.entities.Specialist.filter({contact_email:me.email,active:true});

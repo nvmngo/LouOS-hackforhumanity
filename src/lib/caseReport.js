@@ -2,20 +2,12 @@ const text=value=>typeof value==='string'?value.trim():value==null?'':String(val
 const list=value=>Array.isArray(value)?value.map(text).filter(Boolean):text(value)?[text(value)]:[];
 
 const supportCategory={
-  Housing:'Accommodation',
-  'Domestic or family violence':'Domestic / family violence support',
-  'Domestic / Family Violence':'Domestic / family violence support',
-  Financial:'Financial assistance',
-  Legal:'Legal support',
-  'Health or wellbeing':'Health',
-  'Health / Wellbeing':'Health',
-  Employment:'Employment',
-  'Family or children':'Family / child support',
-  'Family / Children':'Family / child support',
-  'Social support':'Social support',
-  'Social Support':'Social support',
-  Safety:'Other',
-  Other:'Other'
+  'Somewhere to live':'Accommodation',Housing:'Accommodation','Domestic or family violence':'Domestic / family violence support','Domestic / Family Violence':'Domestic / family violence support',
+  Safety:'Safety support',Money:'Financial assistance',Financial:'Financial assistance',
+  'Health, or how I’m feeling':'Health','Health or wellbeing':'Health','Health / Wellbeing':'Health',
+  'Family or children':'Family / child support','Family / Children':'Family / child support','Legal help':'Legal support',Legal:'Legal support',
+  'Work or study':'Employment',Employment:'Employment','Feeling alone':'Social support',
+  'Social support':'Social support','Social Support':'Social support','Something else':'Other',Other:'Other'
 };
 
 export const emptyCaseReport=()=>({
@@ -64,13 +56,14 @@ export function normalizeCaseReport(record={}){
   const raw=record.raw_answers||{};
   const caseId=record.caseId||record.case_id||record.form_id||(record.id?`CASE-${record.id.slice(-6).toUpperCase()}`:'');
   const contact=text(record.contact||raw.phoneOrContact);
-  const categories=list(record.problem_categories||raw.problemCategories).map(item=>supportCategory[item]||item);
+  const categories=list(record.problem_categories||raw.supportAreas||raw.support_areas||raw.problemCategories).map(item=>supportCategory[item]||item);
   const urgent=text(raw.urgentAttention);
-  const childrenCount=text(raw.childrenCount);
-  const dependants=childrenCount?`${text(raw.childrenDependants)||'Yes'} — ${childrenCount}`:text(raw.childrenDependants||raw.dependants||record.dependants);
+  const childAnswer=text(raw.hasChildren||raw.has_children);
+  const childCount=text(raw.childrenCount||raw.children_count);
+  const dependants=text(raw.childrenDependants||raw.dependants||record.dependants)||(childAnswer.toLowerCase()==='no'?'No children':childAnswer.toLowerCase()==='yes'?(childCount?`${childCount} child${childCount==='1'?'':'ren'}`:'Has children'):'');
   const concerns=[
     ...list(record.safety_concerns),
-    ...(categories.includes('Domestic / family violence support')?['Violence / threats']:[]),
+    ...(categories.includes('Safety support')?['Safety support requested']:[]),
     ...(text(raw.safeToday).toLowerCase()==='no'?['Unsafe accommodation']:[]),
     ...(urgent?[urgent]:[])
   ].filter((value,index,array)=>array.indexOf(value)===index);
@@ -79,10 +72,10 @@ export function normalizeCaseReport(record={}){
   const legacy={
     caseOverview:{caseId,openedDate:text(raw.date||created).slice(0,10),assignedSpecialist:text(record.assigned_specialist_name),status:text(record.status)==='matched'?'Active':text(record.status||'New'),urgency:text(record.urgency),preferredLanguage:text(record.preferred_language||raw.preferredLanguage),preferredContactMethod:text(raw.safeContactPreference)},
     clientInformation:{fullName:text(record.client_name||raw.fullName),preferredName:text(record.preferred_name||raw.preferredName),age:text(raw.age),pronouns:text(raw.pronouns),phone:contact.includes('@')?'':contact,email:contact.includes('@')?contact:text(raw.email),dependants,accommodation:text(raw.currentAccommodation||raw.accommodation||record.accommodation),preferredContactMethod:text(raw.safeContactPreference),safeToContact:text(raw.safeToday),contactInstructions:text(raw.safeContactPreference||record.safeContact)},
-    presentingSituation:{summary:text(record.summary||raw.reasonToday),recentChanges:text(raw.recentEvents||raw.stayDuration)},
+    presentingSituation:{summary:text(record.summary||raw.reasonToday||raw.reason_today),recentChanges:text(raw.recentEvents||raw.stayDuration||raw.stay_duration)},
     safety:{level:safetyLevel(record.urgency,raw.safeToday),concerns,notes:urgent,sources:concerns.length?['Client reported']:[]},
     supportNeeds:{primaryNeed:text(record.main_need||raw.helpToday||record.mainNeed),secondaryNeeds:categories,clientPriority:text(raw.helpToday||record.main_need||record.mainNeed)},
-    background:{other:text(raw.otherFacts)},
+    background:{other:text(raw.otherHelp||raw.other_help||raw.supportOther||raw.support_other||raw.otherFacts)},
     clientGoals:{immediateGoal:text(raw.helpToday||record.main_need||record.mainNeed)},
     provenance:[{field:'intake',source,updatedAt:created,approvedBySpecialist:false,suggestionStatus:record.source==='paper'?'Pending':'Approved'}]
   };

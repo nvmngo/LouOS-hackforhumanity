@@ -25,10 +25,13 @@ export default function OnlineReportField({field,value,values,error,onChange}){
 
   if(field.type==='radio')return <fieldset {...wrapper} aria-describedby={describedBy}><legend>{fieldLabel}</legend>{field.helper&&<p className="online-helper" id={helperId}>{field.helper}</p>}{message}<div className="online-options">{options.map(option=><label key={optionValue(option)}><input type="radio" name={field.id} checked={value===optionValue(option)} onChange={()=>onChange(field.id,optionValue(option))}/><span>{optionLabel(option)}</span></label>)}</div></fieldset>;
 
+  if(field.type==='children')return <fieldset {...wrapper} className={`${wrapper.className} online-children`}><legend>{fieldLabel}</legend>{message}<div>{options.map(option=><label key={optionValue(option)}><input type="radio" name={field.id} checked={value===optionValue(option)} onChange={()=>{onChange(field.id,optionValue(option));if(optionValue(option)==='No')onChange(field.countId,'');}}/><span>{optionLabel(option)}</span></label>)}<label className="online-children-yes"><span>— {field.countLabel}</span><input type="number" inputMode="numeric" min="0" aria-label={field.countLabel} value={values?.[field.countId]||''} disabled={value!=='Yes'} onChange={e=>onChange(field.countId,e.target.value)}/></label></div></fieldset>;
+
   if(field.type==='checkboxes'){
     const selected=value||[];
-    const showOther=field.otherInputId&&selected.includes('Other');
-    const toggle=option=>{const removing=selected.includes(option);onChange(field.id,removing?selected.filter(item=>item!==option):[...selected,option]);if(removing&&option==='Other'&&field.otherInputId)onChange(field.otherInputId,'');};
+    const otherOption=field.otherOption||'Other';
+    const showOther=field.otherInputId&&selected.includes(otherOption);
+    const toggle=option=>{const removing=selected.includes(option);onChange(field.id,removing?selected.filter(item=>item!==option):[...selected,option]);if(removing&&option===otherOption&&field.otherInputId)onChange(field.otherInputId,'');};
     return <fieldset {...wrapper} aria-label={field.label?undefined:field.ariaLabel}>{field.label?<legend>{fieldLabel}</legend>:mark&&<p className="online-required-line">{mark}</p>}{message}<div className="online-checks">{options.map(option=><label key={optionValue(option)}><input type="checkbox" checked={selected.includes(optionValue(option))} onChange={()=>toggle(optionValue(option))}/><span>{optionLabel(option)}</span></label>)}</div>{showOther&&<label className="online-other-detail"><span>{field.otherLabel}</span><input type="text" placeholder={field.otherPlaceholder} value={values?.[field.otherInputId]||''} onChange={e=>onChange(field.otherInputId,e.target.value)} autoFocus/></label>}</fieldset>;
   }
 

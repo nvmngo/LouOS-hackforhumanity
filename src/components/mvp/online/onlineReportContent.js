@@ -7,7 +7,8 @@ export const onlineLanguages=[
   {code:'ko',label:'한국어',englishName:'Korean'}
 ];
 
-const categories=['Housing','Safety','Financial','Health or wellbeing','Family or children','Legal','Employment','Social support','Other'];
+// Stored values stay in English so caseReport and specialist matching resolve them in any language.
+export const supportAreaOptions=['Somewhere to live','Safety','Money','Health, or how I’m feeling','Family or children','Legal help','Work or study','Feeling alone','Something else'];
 
 const content={
   en:{
@@ -28,11 +29,11 @@ const content={
       age:{label:'Age',placeholder:'e.g. 34'},
       preferredLanguage:{label:'Language you prefer',placeholder:'e.g. English, Arabic, Mandarin, Vietnamese'},
       phoneOrContact:{label:'Phone',subLabel:'Optional',helper:'Only if it is safe for us to contact you here.',placeholder:'e.g. 04XX XXX XXX'},
-      childrenDependants:{label:'Do you have any children?'},
+      hasChildren:{label:'Do you have any children?'},
       currentAccommodation:{label:'Where are you staying now?',placeholder:'e.g. With a friend, temporary accommodation, a shelter, a rental home, or nowhere at the moment'},
       stayDuration:{label:'How long can you stay there?',helper:'Roughly is fine.',placeholder:'e.g. Until Friday, about 2 weeks, or I am not sure'},
       reasonToday:{label:'Why did you come to Lou’s Place today?',placeholder:'e.g. I wanted to speak with someone about what support is available'},
-      otherFacts:{label:'Is there anything else we can help you with?',placeholder:'e.g. I need an interpreter, or I have an appointment tomorrow'}
+      otherHelp:{label:'Is there anything else we can help you with?',placeholder:'e.g. I need an interpreter, or I have an appointment tomorrow'}
     }
   },
   vi:{
@@ -53,11 +54,11 @@ const content={
       age:{label:'Tuổi',placeholder:'ví dụ: 34'},
       preferredLanguage:{label:'Ngôn ngữ bạn muốn dùng',placeholder:'ví dụ: Tiếng Việt, Tiếng Anh, Tiếng Trung'},
       phoneOrContact:{label:'Điện thoại',subLabel:'Không bắt buộc',helper:'Chỉ khi bạn thấy an toàn để chúng tôi liên lạc.',placeholder:'ví dụ: 04XX XXX XXX'},
-      childrenDependants:{label:'Bạn có con không?'},
+      hasChildren:{label:'Bạn có con không?'},
       currentAccommodation:{label:'Hiện tại bạn đang ở đâu?',placeholder:'ví dụ: Ở nhà bạn bè, nơi ở tạm, nhà tạm lánh, nhà thuê, hoặc chưa có chỗ ở'},
       stayDuration:{label:'Bạn có thể ở đó bao lâu?',helper:'Khoảng chừng là được.',placeholder:'ví dụ: Đến thứ Sáu, khoảng 2 tuần, hoặc tôi không chắc'},
       reasonToday:{label:'Vì sao hôm nay bạn đến Lou’s Place?',placeholder:'ví dụ: Tôi muốn nói chuyện với ai đó về những hỗ trợ hiện có'},
-      otherFacts:{label:'Chúng tôi có thể giúp bạn điều gì khác không?',placeholder:'ví dụ: Tôi cần người phiên dịch, hoặc tôi có hẹn vào ngày mai'}
+      otherHelp:{label:'Chúng tôi có thể giúp bạn điều gì khác không?',placeholder:'ví dụ: Tôi cần người phiên dịch, hoặc tôi có hẹn vào ngày mai'}
     }
   },
   zh:{
@@ -78,11 +79,11 @@ const content={
       age:{label:'年龄',placeholder:'例如：34'},
       preferredLanguage:{label:'您偏好的语言',placeholder:'例如：中文、英文、越南语'},
       phoneOrContact:{label:'电话',subLabel:'可不填',helper:'只有在您认为安全时才留下联系方式。',placeholder:'例如：04XX XXX XXX'},
-      childrenDependants:{label:'您有孩子吗？'},
+      hasChildren:{label:'您有孩子吗？'},
       currentAccommodation:{label:'您现在住在哪里？',placeholder:'例如：住在朋友家、临时住所、庇护所、租房，或目前没有住处'},
       stayDuration:{label:'您可以在那里住多久？',helper:'大概即可。',placeholder:'例如：住到星期五、大约两周，或我不确定'},
       reasonToday:{label:'您今天为什么来 Lou’s Place？',placeholder:'例如：我想找人谈谈可以获得哪些帮助'},
-      otherFacts:{label:'还有其他我们可以帮您的事情吗？',placeholder:'例如：我需要翻译，或我明天有预约'}
+      otherHelp:{label:'还有其他我们可以帮您的事情吗？',placeholder:'例如：我需要翻译，或我明天有预约'}
     }
   },
   ar:{
@@ -103,11 +104,11 @@ const content={
       age:{label:'العمر',placeholder:'مثال: 34'},
       preferredLanguage:{label:'اللغة التي تفضلها',placeholder:'مثال: العربية، الإنجليزية، الفيتنامية'},
       phoneOrContact:{label:'الهاتف',subLabel:'اختياري',helper:'فقط إذا كان من الآمن أن نتواصل معك عليه.',placeholder:'مثال: 04XX XXX XXX'},
-      childrenDependants:{label:'هل لديك أطفال؟'},
+      hasChildren:{label:'هل لديك أطفال؟'},
       currentAccommodation:{label:'أين تقيم حاليًا؟',placeholder:'مثال: عند صديق، سكن مؤقت، مأوى، منزل مستأجر، أو لا يوجد مكان حاليًا'},
       stayDuration:{label:'كم يمكنك البقاء هناك؟',helper:'تقريبًا يكفي.',placeholder:'مثال: حتى يوم الجمعة، حوالي أسبوعين، أو لست متأكدًا'},
       reasonToday:{label:'لماذا أتيت إلى Lou’s Place اليوم؟',placeholder:'مثال: أردت التحدث مع شخص عن الدعم المتاح'},
-      otherFacts:{label:'هل هناك شيء آخر يمكننا مساعدتك فيه؟',placeholder:'مثال: أحتاج إلى مترجم، أو لدي موعد غدًا'}
+      otherHelp:{label:'هل هناك شيء آخر يمكننا مساعدتك فيه؟',placeholder:'مثال: أحتاج إلى مترجم، أو لدي موعد غدًا'}
     }
   },
   es:{
@@ -128,11 +129,11 @@ const content={
       age:{label:'Edad',placeholder:'ej. 34'},
       preferredLanguage:{label:'Idioma que prefiere',placeholder:'ej. español, inglés, árabe'},
       phoneOrContact:{label:'Teléfono',subLabel:'Opcional',helper:'Solo si es seguro que le contactemos ahí.',placeholder:'ej. 04XX XXX XXX'},
-      childrenDependants:{label:'¿Tiene hijos?'},
+      hasChildren:{label:'¿Tiene hijos?'},
       currentAccommodation:{label:'¿Dónde se está quedando ahora?',placeholder:'ej. Con un amigo, alojamiento temporal, un refugio, una vivienda alquilada, o sin alojamiento'},
       stayDuration:{label:'¿Cuánto tiempo puede quedarse ahí?',helper:'Un aproximado está bien.',placeholder:'ej. Hasta el viernes, unas 2 semanas, o no estoy seguro'},
       reasonToday:{label:'¿Por qué vino hoy a Lou’s Place?',placeholder:'ej. Quería hablar con alguien sobre el apoyo disponible'},
-      otherFacts:{label:'¿Hay algo más en lo que podamos ayudarle?',placeholder:'ej. Necesito un intérprete, o tengo una cita mañana'}
+      otherHelp:{label:'¿Hay algo más en lo que podamos ayudarle?',placeholder:'ej. Necesito un intérprete, o tengo una cita mañana'}
     }
   },
   ko:{
@@ -153,11 +154,11 @@ const content={
       age:{label:'나이',placeholder:'예: 34'},
       preferredLanguage:{label:'선호하는 언어',placeholder:'예: 한국어, 영어, 베트남어'},
       phoneOrContact:{label:'전화번호',subLabel:'선택 사항',helper:'연락해도 안전한 경우에만 적어 주세요.',placeholder:'예: 04XX XXX XXX'},
-      childrenDependants:{label:'자녀가 있으신가요?'},
+      hasChildren:{label:'자녀가 있으신가요?'},
       currentAccommodation:{label:'지금 어디에서 지내고 계신가요?',placeholder:'예: 친구 집, 임시 거처, 쉼터, 임대 주택, 또는 현재 머물 곳이 없음'},
       stayDuration:{label:'그곳에서 얼마나 지낼 수 있나요?',helper:'대략이면 충분합니다.',placeholder:'예: 금요일까지, 약 2주, 또는 잘 모르겠음'},
       reasonToday:{label:'오늘 Lou’s Place에 오신 이유는 무엇인가요?',placeholder:'예: 어떤 도움을 받을 수 있는지 이야기하고 싶었습니다'},
-      otherFacts:{label:'그 밖에 도와드릴 일이 있을까요?',placeholder:'예: 통역이 필요합니다, 또는 내일 예약이 있습니다'}
+      otherHelp:{label:'그 밖에 도와드릴 일이 있을까요?',placeholder:'예: 통역이 필요합니다, 또는 내일 예약이 있습니다'}
     }
   }
 };
@@ -174,16 +175,16 @@ export const buildSections=code=>{
       {id:'age',type:'number',inputMode:'numeric',min:'0',required:true,...f.age},
       {id:'preferredLanguage',required:true,...f.preferredLanguage},
       {id:'phoneOrContact',type:'tel',...f.phoneOrContact},
-      {id:'childrenDependants',type:'children',countId:'childrenCount',required:true,...t.children,...f.childrenDependants},
+      {id:'hasChildren',type:'children',countId:'childrenCount',required:true,countLabel:t.children.ask,options:[{value:'No',label:t.children.no},{value:'Yes',label:t.children.yes}],...f.hasChildren},
       {id:'currentAccommodation',type:'textarea',required:true,...f.currentAccommodation},
       {id:'stayDuration',required:true,...f.stayDuration}
     ]},
     {number:'2',title:t.sections.now,note:t.tick,fields:[
-      {id:'problemCategories',ariaLabel:t.tick,type:'checkboxes',required:true,otherInputId:'problemCategoriesOther',otherLabel:t.other.label,otherPlaceholder:t.other.placeholder,
-        options:categories.map((value,index)=>({value,label:t.options[index]}))}
+      {id:'supportAreas',ariaLabel:t.tick,type:'checkboxes',required:true,otherInputId:'supportOther',otherOption:'Something else',otherLabel:t.other.label,otherPlaceholder:t.other.placeholder,
+        options:supportAreaOptions.map((value,index)=>({value,label:t.options[index]}))}
     ]},
     {number:'3',title:t.sections.situation,fields:[{id:'reasonToday',type:'textarea',rows:5,required:true,...f.reasonToday}]},
-    {number:'4',title:t.sections.anything,fields:[{id:'otherFacts',type:'textarea',rows:5,...f.otherFacts}]}
+    {number:'4',title:t.sections.anything,fields:[{id:'otherHelp',type:'textarea',rows:5,...f.otherHelp}]}
   ];
   return sections.map(section=>({...section,fields:section.fields.map(field=>field.required?{...field,requiredMark:t.validation.required}:field)}));
 };

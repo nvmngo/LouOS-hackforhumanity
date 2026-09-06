@@ -26,7 +26,7 @@ export default function ResetPassword() {
     setLoading(true);
     try {
       await base44.auth.resetPassword({ resetToken, newPassword });
-      window.location.href = "/login";
+      window.location.href = "/employee/login";
     } catch (err) {
       setError(err.message || "Failed to reset password");
     } finally {
@@ -41,7 +41,7 @@ export default function ResetPassword() {
         title="Invalid reset link"
         subtitle="This password reset link is missing or invalid"
         footer={
-          <Link to="/forgot-password" className="text-primary font-medium hover:underline">
+          <Link to="/employee/forgot-password" className="text-primary font-medium hover:underline">
             Request a new link
           </Link>
         }

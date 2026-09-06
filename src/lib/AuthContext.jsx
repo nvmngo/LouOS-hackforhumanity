@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { appParams } from '@/lib/app-params';
+import {clearEmployeeSession, employeePortal, readEmployeeSession} from '@/lib/employeeSession';
 
 const AuthContext = createContext();
 
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         setAppPublicSettings(publicSettings);
         
         // If we got the app public settings successfully, check if user is authenticated
-        if (appParams.token) {
+        if (appParams.token || readEmployeeSession()) {
           await checkUserAuth();
         } else {
           setIsLoadingAuth(false);
@@ -81,9 +82,11 @@ export const AuthProvider = ({ children }) => {
     try {
       // Now check if the user is authenticated
       setIsLoadingAuth(true);
-      const currentUser = await base44.auth.me();
+      const prototypeSession=readEmployeeSession();
+      const currentUser=prototypeSession?(await employeePortal('session')).data.employee:await base44.auth.me();
       setUser(currentUser);
       setIsAuthenticated(true);
+      setAuthError(null);
       setIsLoadingAuth(false);
       setAuthChecked(true);
     } catch (error) {
@@ -103,8 +106,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = (shouldRedirect = true) => {
+    const prototypeSession=readEmployeeSession();
+    clearEmployeeSession();
     setUser(null);
     setIsAuthenticated(false);
+    setAuthChecked(true);
+    setAuthError(null);
+
+    if(prototypeSession){
+      if(shouldRedirect)window.location.href='/employee/login';
+      return;
+    }
     
     if (shouldRedirect) {
       // Use the SDK's logout method which handles token cleanup and redirect

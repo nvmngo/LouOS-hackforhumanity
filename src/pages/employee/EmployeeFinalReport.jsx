@@ -1,10 +1,58 @@
 import React,{useState} from 'react';
 import {Link,useParams} from 'react-router-dom';
+import ReturnButton from '@/components/portal/ReturnButton';
 import {Check,Save} from 'lucide-react';
 import {base44} from '@/api/base44Client';
-import ReturnButton from '@/components/portal/ReturnButton';
 import useEmployeeCase from '@/hooks/useEmployeeCase';
 import {applyReportSuggestions,suggestionHistory} from '@/lib/caseReport';
+import {currentEmployee,employeePortal,isPrototypeEmployee} from '@/lib/employeeSession';
 
 const compact=value=>Array.isArray(value)?value.join(' · '):value||'Not provided';
-export default function EmployeeFinalReport(){const{caseId}=useParams();const{data,loading}=useEmployeeCase(caseId);const external=new URLSearchParams(window.location.search).get('external')==='yes';const notes=JSON.parse(sessionStorage.getItem(`employee-case-notes-${caseId}`)||'[]');const selected=external?JSON.parse(sessionStorage.getItem(`employee-referral-${caseId}`)||'null'):null;const[saving,setSaving]=useState(false),[saved,setSaved]=useState(false),[error,setError]=useState('');if(loading)return <main className="mvp-main">Loading…</main>;let report=applyReportSuggestions(data.report,notes.map(note=>typeof note==='string'?{fieldPath:'consultation.clientReported',value:note}:note));if(selected)report={...report,referrals:[...report.referrals,{organisation:selected.name,reason:selected.reason||selected.service,consent:'To be confirmed',referralDate:'',status:'Proposed',outcome:''}]};const sections=[['A. Case Overview',`${compact(report.caseOverview.status)} · ${compact(report.caseOverview.urgency)} · ${compact(report.caseOverview.assignedSpecialist)}`],['B. Client Information',`${compact(report.clientInformation.fullName)} · ${compact(report.clientInformation.dependants)} · ${compact(report.clientInformation.accommodation)}`],['C. Presenting Situation',compact(report.presentingSituation.summary)],['D. Safety & Immediate Concerns',`${compact(report.safety.level)} · ${compact(report.safety.concerns)}`],['E. Identified Support Needs',`${compact(report.supportNeeds.primaryNeed)} · ${compact(report.supportNeeds.secondaryNeeds)}`],['F. Relevant Background',compact(Object.values(report.background).filter(Boolean))],['G. Client Goals & Preferences',compact(report.clientGoals.immediateGoal)],['H. Consultation Summary',compact([...report.consultation.clientReported,...report.consultation.discussion,...report.consultation.outcome])],['I. Support Plan / Agreed Solution',compact(report.supportPlan.agreedSolution||'To be discussed')],['J. Actions & Responsibilities',report.actions.length?report.actions.map(item=>`${item.description} — ${item.status}`).join(' · '):'No actions recorded'],['K. Referrals & External Services',report.referrals.length?report.referrals.map(item=>`${item.organisation} — ${item.status}`).join(' · '):'No referrals recorded'],['L. Follow-Up Plan',compact(report.followUp.purpose||report.followUp.nextContactDate)],['M. Case Outcome / Closure',report.caseOverview.status==='Closed'?compact(report.closure.outcomeAchieved):'Not applicable while the case is active']];const reportText=sections.map(([title,value])=>`${title}\n${value}`).join('\n\n');const save=async()=>{setSaving(true);setError('');try{const me=await base44.auth.me();report={...report,caseOverview:{...report.caseOverview,assignedSpecialist:me.full_name||report.caseOverview.assignedSpecialist,status:'Active'},provenance:[...(report.provenance||[]),...suggestionHistory(notes,me.full_name||me.email)]};const history=[...(data.report?.provenance||[]),...suggestionHistory(notes,me.full_name||me.email)];const payload={submission_id:data.id,case_id:data.caseId,client_name:data.clientName,specialist_email:me.email,specialist_name:me.full_name||'',case_summary:report.presentingSituation.summary,main_need:report.supportNeeds.primaryNeed,urgency:data.urgency,problem_categories:report.supportNeeds.secondaryNeeds,interview_notes:notes.map(note=>typeof note==='string'?note:note.final_value||note.finalValue||note.value),external_support_needed:external,selected_organizations:selected?[{organization_id:selected.id,name:selected.name,service:selected.service,reason:selected.reason}]:[],report_text:reportText,case_report:report,report_history:history,report_version:2,status:'finalised'};const existing=await base44.entities.EmployeeCaseReport.filter({submission_id:data.id});if(existing[0])await base44.entities.EmployeeCaseReport.update(existing[0].id,payload);else await base44.entities.EmployeeCaseReport.create(payload);await base44.entities.ClientSubmission.update(data.id,{case_report:report,report_history:history,report_version:2});setSaved(true)}catch(e){setError(e.message||'Report could not be saved.')}finally{setSaving(false)}};return <main className="mvp-main"><ReturnButton variant="inline" to={`/staff/cases/${caseId}/decision`} label="Back to the external support step"/><article className="final-paper"><header><div><p className="mvp-kicker">Structured Case Support Report</p><h1>{data.clientName}</h1><p className="survey-note">{data.caseId} · Living report</p></div><span className="pill">Review</span></header>{sections.map(([title,value])=><section className="final-section" key={title}><h2>{title}</h2><p>{value}</p></section>)}</article>{error&&<p className="paper-error">{error}</p>}<div className="final-actions">{saved?<Link className="mvp-btn" to="/staff"><Check size={17}/>Dashboard</Link>:<button className="mvp-btn" disabled={saving} onClick={save}><Save size={17}/>{saving?'Saving…':'Save structured report'}</button>}</div></main>}
+
+export default function EmployeeFinalReport(){
+  const{caseId}=useParams();
+  const{data,loading,error:caseError}=useEmployeeCase(caseId);
+  const external=new URLSearchParams(window.location.search).get('external')==='yes';
+  const notes=JSON.parse(sessionStorage.getItem(`employee-case-notes-${caseId}`)||'[]');
+  const selected=external?JSON.parse(sessionStorage.getItem(`employee-referral-${caseId}`)||'null'):null;
+  const[saving,setSaving]=useState(false),[saved,setSaved]=useState(false),[error,setError]=useState('');
+  if(loading)return <main className="mvp-main">Loading…</main>;
+  if(caseError||!data)return <main className="mvp-main"><div className="employee-empty">{caseError||'Case not found.'}</div></main>;
+  let report=applyReportSuggestions(data.report,notes.map(note=>typeof note==='string'?{fieldPath:'consultation.clientReported',value:note}:note));
+  if(selected)report={...report,referrals:[...report.referrals,{organisation:selected.name,reason:selected.reason||selected.service,consent:'To be confirmed',referralDate:'',status:'Proposed',outcome:''}]};
+  const sections=[
+    ['A. Case Overview',`${compact(report.caseOverview.status)} · ${compact(report.caseOverview.urgency)} · ${compact(report.caseOverview.assignedSpecialist)}`],
+    ['B. Client Information',`${compact(report.clientInformation.fullName)} · ${compact(report.clientInformation.dependants)} · ${compact(report.clientInformation.accommodation)}`],
+    ['C. Presenting Situation',compact(report.presentingSituation.summary)],
+    ['D. Safety & Immediate Concerns',`${compact(report.safety.level)} · ${compact(report.safety.concerns)}`],
+    ['E. Identified Support Needs',`${compact(report.supportNeeds.primaryNeed)} · ${compact(report.supportNeeds.secondaryNeeds)}`],
+    ['F. Relevant Background',compact(Object.values(report.background).filter(Boolean))],
+    ['G. Client Goals & Preferences',compact(report.clientGoals.immediateGoal)],
+    ['H. Consultation Summary',compact([...report.consultation.clientReported,...report.consultation.discussion,...report.consultation.outcome])],
+    ['I. Support Plan / Agreed Solution',compact(report.supportPlan.agreedSolution||'To be discussed')],
+    ['J. Actions & Responsibilities',report.actions.length?report.actions.map(item=>`${item.description} — ${item.status}`).join(' · '):'No actions recorded'],
+    ['K. Referrals & External Services',report.referrals.length?report.referrals.map(item=>`${item.organisation} — ${item.status}`).join(' · '):'No referrals recorded'],
+    ['L. Follow-Up Plan',compact(report.followUp.purpose||report.followUp.nextContactDate)],
+    ['M. Case Outcome / Closure',report.caseOverview.status==='Closed'?compact(report.closure.outcomeAchieved):'Not applicable while the case is active']
+  ];
+  const reportText=sections.map(([title,value])=>`${title}\n${value}`).join('\n\n');
+  const save=async()=>{
+    setSaving(true);setError('');
+    try{
+      const me=await currentEmployee();
+      report={...report,caseOverview:{...report.caseOverview,assignedSpecialist:me.full_name||report.caseOverview.assignedSpecialist,status:'Active'},provenance:[...(report.provenance||[]),...suggestionHistory(notes,me.full_name||me.email)]};
+      const history=[...(data.report?.provenance||[]),...suggestionHistory(notes,me.full_name||me.email)];
+      const payload={submission_id:data.id,case_id:data.caseId,client_name:data.clientName,specialist_email:me.email,specialist_name:me.full_name||'',case_summary:report.presentingSituation.summary,main_need:report.supportNeeds.primaryNeed,urgency:data.urgency,problem_categories:report.supportNeeds.secondaryNeeds,interview_notes:notes.map(note=>typeof note==='string'?note:note.final_value||note.finalValue||note.value),external_support_needed:external,selected_organizations:selected?[{organization_id:selected.id,name:selected.name,service:selected.service,reason:selected.reason}]:[],report_text:reportText,case_report:report,report_history:history,report_version:2,status:'finalised'};
+      if(isPrototypeEmployee()){
+        await employeePortal('saveFinalReport',{caseId:data.id,payload});
+      }else{
+        const existing=await base44.entities.EmployeeCaseReport.filter({submission_id:data.id});
+        if(existing[0])await base44.entities.EmployeeCaseReport.update(existing[0].id,payload);else await base44.entities.EmployeeCaseReport.create(payload);
+        await base44.entities.ClientSubmission.update(data.id,{case_report:report,report_history:history,report_version:2});
+      }
+      setSaved(true);
+    }catch(e){setError(e?.response?.data?.error||e.message||'Report could not be saved.');}
+    finally{setSaving(false);}
+  };
+  return <main className="mvp-main"><ReturnButton variant="inline" to={`/employee/cases/${caseId}/decision`} label="Back to the external support step"/><article className="final-paper"><header><div><p className="mvp-kicker">Structured Case Support Report</p><h1>{data.clientName}</h1><p className="survey-note">{data.caseId} · Living report</p></div><span className="pill">Review</span></header>{sections.map(([title,value])=><section className="final-section" key={title}><h2>{title}</h2><p>{value}</p></section>)}</article>{error&&<p className="paper-error">{error}</p>}<div className="final-actions">{saved?<Link className="mvp-btn" to="/employee"><Check size={17}/>Dashboard</Link>:<button className="mvp-btn" disabled={saving} onClick={save}><Save size={17}/>{saving?'Saving…':'Save structured report'}</button>}</div></main>;
+}
