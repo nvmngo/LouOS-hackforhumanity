@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
-import { createPrototypeEmployeeToken, getPrototypeEmployee, verifyPrototypePassword } from '../../shared/prototypeEmployeeAuth.ts';
+import { createPrototypeEmployeeToken, findPrototypeSpecialist, getPrototypeEmployee, verifyPrototypePassword } from '../../shared/prototypeEmployeeAuth.ts';
 
 const clean = (value: unknown, length = 2000) => typeof value === 'string' ? value.trim().slice(0, length) : '';
 
@@ -14,8 +14,7 @@ export default async function(req: Request): Promise<Response> {
     if (action === 'login') {
       const email = await verifyPrototypePassword(body?.email, body?.password);
       if (!email) return Response.json({error: 'Invalid email or password.'}, {status: 401});
-      const specialists = await entities.Specialist.filter({contact_email: email, active: true});
-      const specialist = specialists[0];
+      const specialist = await findPrototypeSpecialist(email, entities);
       if (!specialist) return Response.json({error: 'Employee access is not configured.'}, {status: 403});
       return Response.json({
         employeeToken: await createPrototypeEmployeeToken(email),
