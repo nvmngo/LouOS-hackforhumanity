@@ -1,6 +1,6 @@
 // Prototype-only employee authentication for the five fictional specialists.
 // Replace this with verified Base44 users before handling real client data.
-import { ensurePrototypeSpecialists } from './prototypeSpecialistRoster.ts';
+import { ensurePrototypeSpecialists, removeDuplicateRosterProfiles } from './prototypeSpecialistRoster.ts';
 
 const encoder = new TextEncoder();
 
@@ -52,12 +52,23 @@ export async function verifyPrototypeEmployeeToken(token: unknown) {
 // Looks up the active specialist profile for a prototype employee, provisioning
 // the fictional roster first if it is missing (the local backend starts empty
 // after every `base44 dev` restart).
+// Picks the same profile every time even while a provisioning race is still
+// settling, so a specialist's id does not flip between requests.
+const earliest = (specialists: any[]) => specialists.slice().sort((left, right) =>
+  String(left.created_date || '').localeCompare(String(right.created_date || '')) ||
+  String(left.id).localeCompare(String(right.id)))[0] || null;
+
 export async function findPrototypeSpecialist(email: string, entities: any) {
   const specialists = await entities.Specialist.filter({contact_email: email, active: true});
-  if (specialists[0]) return specialists[0];
+  // More than one profile for a single prototype email means a provisioning
+  // race left duplicates behind. Seeing them is the only reliable signal that
+  // cleanup is due, so clear them here rather than on the provisioning path,
+  // which a warm table never reaches. The survivor is the record this call
+  // returns, so the caller keeps a stable id.
+  if (specialists.length > 1) await removeDuplicateRosterProfiles(entities);
+  if (specialists.length) return earliest(specialists);
   await ensurePrototypeSpecialists(entities);
-  const provisioned = await entities.Specialist.filter({contact_email: email, active: true});
-  return provisioned[0] || null;
+  return earliest(await entities.Specialist.filter({contact_email: email, active: true}));
 }
 
 export async function getPrototypeEmployee(body: any, entities: any) {

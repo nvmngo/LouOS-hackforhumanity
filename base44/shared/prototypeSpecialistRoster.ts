@@ -78,18 +78,63 @@ export const prototypeSpecialistRoster = [
   }
 ];
 
+const rosterEmails = new Set(prototypeSpecialistRoster.map(item => item.contact_email));
+const emailOf = (item: any) => typeof item?.contact_email === 'string' ? item.contact_email.trim().toLowerCase() : '';
+
+// Concurrent invocations of the same worker collapse onto one provisioning run.
+let inFlight: Promise<void> | null = null;
+
 // Creates any roster profile that has no Specialist record yet. Existing
 // records are never modified, so a specialist deactivated on purpose stays
 // deactivated. Returns nothing; callers re-read the entity afterwards.
-export async function ensurePrototypeSpecialists(entities: any) {
+export function ensurePrototypeSpecialists(entities: any): Promise<void> {
+  if (!inFlight) inFlight = provision(entities).finally(() => { inFlight = null; });
+  return inFlight;
+}
+
+async function provision(entities: any) {
   const existing = await entities.Specialist.list('-created_date', 5000);
-  const known = new Set(existing.map((item: any) => typeof item?.contact_email === 'string' ? item.contact_email.trim().toLowerCase() : ''));
+  const known = new Set(existing.map(emailOf));
   const missing = prototypeSpecialistRoster.filter(item => !known.has(item.contact_email));
-  if (!missing.length) return;
-  await Promise.all(missing.map(item => entities.Specialist.create({
-    ...item,
-    upcoming_case_count: 0,
-    congestion_level: 'low',
-    active: true
-  })));
+  if (missing.length) {
+    await Promise.all(missing.map(item => entities.Specialist.create({
+      ...item,
+      upcoming_case_count: 0,
+      congestion_level: 'low',
+      active: true
+    })));
+  }
+  // Always reconcile, even when this call created nothing. Separate workers
+  // cannot see each other's in-flight creates, so several starting on an empty
+  // table each insert the full roster, and none of them can observe the
+  // duplicates in time to clean up its own run. The entity API generates its
+  // own ids and offers no unique constraint, so duplicates cannot be prevented
+  // outright -- instead every later call collapses them, and the table
+  // converges on one profile per email.
+  await removeDuplicateRosterProfiles(entities);
+}
+
+// Keeps the earliest record per roster email and drops the rest. The ordering
+// is total and derived only from stored values, so every racing worker picks
+// the same survivor and they converge instead of deleting each other's keeper.
+export async function removeDuplicateRosterProfiles(entities: any) {
+  const all = await entities.Specialist.list('-created_date', 5000);
+  const grouped = new Map<string, any[]>();
+  for (const item of all) {
+    const email = emailOf(item);
+    if (!rosterEmails.has(email)) continue;
+    const bucket = grouped.get(email);
+    if (bucket) bucket.push(item); else grouped.set(email, [item]);
+  }
+  const surplus: any[] = [];
+  for (const items of grouped.values()) {
+    if (items.length < 2) continue;
+    items.sort((left, right) =>
+      String(left.created_date || '').localeCompare(String(right.created_date || '')) ||
+      String(left.id).localeCompare(String(right.id)));
+    surplus.push(...items.slice(1));
+  }
+  // A racing worker may have deleted the same row already; that is the intended
+  // outcome either way, so a failed delete is not an error.
+  await Promise.all(surplus.map(item => entities.Specialist.delete(item.id).catch(() => {})));
 }
